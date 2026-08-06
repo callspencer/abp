@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encuesta sobre la historia de Medellín - Equipo #4 ABP 9-A</title>
+    <style>
+        :root {
+            --primary: #1f4e5b;
+            --primary-dark: #13333b;
+            --secondary: #e0f2f1;
+            --accent: #2e7d32;
+            --bg: #f4f7f6;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            --border: #e0e0e0;
+            --success: #2e7d32;
+            --danger: #c62828;
+            --neutral: #0277bd;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px 10px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 720px;
+            width: 100%;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .header-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            text-align: center;
+        }
+
+        .header-card h1 {
+            margin: 0 0 8px 0;
+            font-size: 1.6rem;
+        }
+
+        .header-card .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            font-weight: 600;
+        }
+
+        .admin-banner {
+            display: none;
+            background: #212121;
+            color: #ffca28;
+            text-align: center;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        .consent-box {
+            background: #fff8e1;
+            border-left: 5px solid #ffa000;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #5d4037;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 15px 0;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .checkbox-container input {
+            margin-top: 3px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        .btn-start {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-start:disabled {
+            background: #b0bec5;
+            cursor: not-allowed;
+        }
+
+        /* Popup de edad */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-box {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            max-width: 380px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
+
+        .modal-box h2 {
+            margin-top: 0;
+            color: var(--primary);
+            font-size: 1.15rem;
+        }
+
+        .modal-box input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            font-family: inherit;
+        }
+
+        .modal-box input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        #surveyForm {
+            display: none;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--primary);
+            background: var(--secondary);
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 25px 0 15px 0;
+            border-left: 5px solid var(--primary);
+        }
+
+        .question-item {
+            margin-bottom: 20px;
+        }
+
+        .question-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #1a252f;
+        }
+
+        .options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .yn-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .yn-btn {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            background: #fff;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+
+        .yn-btn:hover {
+            border-color: var(--primary);
+            background: #f8fbfb;
+        }
+
+        .yn-btn.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .sub-options-container {
+            display: none;
+            margin-top: 15px;
+            padding-left: 10px;
+            border-left: 3px solid var(--primary);
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .option-btn {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background: #f8fbfb;
+        }
+
+        .option-btn.selected {
+            border-color: var(--primary);
+            background: var(--secondary);
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .radio-dot {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #95a5a6;
+            border-radius: 50%;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .option-btn.selected .radio-dot {
+            border-color: var(--primary);
+            background: var(--primary);
+        }
+
+        .custom-text-input {
+            width: 100%;
+            margin-top: 8px;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            box-sizing: border-box;
+            display: none;
+            font-family: inherit;
+        }
+
+        .custom-text-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .btn-submit:disabled {
+            background: #b0bec5;
+            cursor: not-allowed;
+        }
+
+        .results-panel {
+            display: none;
+        }
+
+        .summary-header {
+            background: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #2e7d32;
+        }
+
+        .summary-header h3 {
+            margin: 0 0 5px 0;
+        }
+
+        .already-submitted-notice {
+            background: #e3f2fd;
+            border-left: 5px solid #1976d2;
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            color: #0d47a1;
+            font-size: 0.95rem;
+        }
+
+        .db-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        .db-table th, .db-table td {
+            border: 1px solid var(--border);
+            padding: 10px;
+            text-align: left;
+        }
+
+        .db-table th {
+            background-color: var(--secondary);
+            color: var(--primary);
+        }
+
+        .db-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .badge-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+
+        .badge-correct {
+            background-color: #e8f5e9;
+            color: var(--success);
+            border: 1px solid #a5d6a7;
+        }
+
+        .badge-incorrect {
+            background-color: #ffebee;
+            color: var(--danger);
+            border: 1px solid #ef9a9a;
+        }
+
+        .badge-opinion {
+            background-color: #e1f5fe;
+            color: var(--neutral);
+            border: 1px solid #81d4fa;
+        }
+
+        /* Panel de administrador */
+        .admin-panel-card {
+            border: 2px dashed var(--primary);
+            background: #fbfdf9;
+        }
+
+        .btn-admin-send {
+            background: var(--accent);
+        }
+
+        .btn-admin-redo {
+            background: #607d8b;
+        }
+
+        .btn-admin-off {
+            background: var(--danger);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div id="adminBanner" class="admin-banner">🛠 MODO ADMIN ACTIVO EN ESTE DISPOSITIVO</div>
+
+    <div class="card header-card">
+        <h1>Encuesta sobre la historia de Medellín</h1>
+        <div class="badge">Equipo #4 ABP 9-A</div>
+    </div>
+
+    <div id="consentStep" class="card">
+        <h2 style="margin-top:0; color: var(--primary); font-size: 1.2rem;">Consentimiento Informado y Participación</h2>
+        
+        <div class="consent-box">
+            Al realizar esta encuesta usted tiene una participación <strong>100% voluntaria</strong> y tiene derecho a retirarse en cualquier momento o a no responder preguntas que considere inadecuadas. Esta encuesta es <strong>totalmente anónima.</strong> No se recopilará ni divulgará ningún dato personal o de identificación a ninguna entidad, ya sea educativa, legal o de otra índole. La información proporcionada se utilizará exclusivamente para los fines de este estudio.
+        </div>
+
+        <label class="checkbox-container">
+            <input type="checkbox" id="voiceAuthCheck" onchange="toggleStartBtn()">
+            <span>Acepto <strong>participar voluntariamente</strong> en esta actividad académica del proyecto ABP.</span>
+        </label>
+
+        <button id="startBtn" class="btn-start" disabled onclick="startSurvey()">Comenzar Encuesta</button>
+    </div>
+
+    <!-- POPUP DE EDAD (tras aceptar el consentimiento) -->
+    <div id="ageModal" class="modal-overlay">
+        <div class="modal-box">
+            <h2>Antes de comenzar</h2>
+            <p style="font-size:0.9rem; color: var(--text);">Indícanos tu edad. Este dato es anónimo y solo se usa con fines estadísticos del proyecto.</p>
+            <input type="number" id="ageInput" min="1" max="119" placeholder="Ej: 15" oninput="validateAge()">
+            <button id="ageContinueBtn" class="btn-start" disabled onclick="confirmAge()">Continuar</button>
+        </div>
+    </div>
+
+    <!-- FORMULARIO CONECTADO A FORMSPREE -->
+    <form id="surveyForm" action="https://formspree.io/f/mrpzzvwl" method="POST">
+        <input type="hidden" name="Edad" id="edadHiddenInput">
+        <div id="questionsContainer"></div>
+        <button type="button" class="btn-submit" id="submitBtn" onclick="submitSurvey()">Enviar Respuestas y Ver Resultados</button>
+    </form>
+
+    <div id="resultsPanel" class="card results-panel">
+        <div id="alreadyNotice" class="already-submitted-notice" style="display: none;">
+            <strong>Nota:</strong> Ya has respondido a esta encuesta desde este dispositivo. A continuación puedes ver el resumen de tus respuestas.
+        </div>
+
+        <div class="summary-header" id="summaryHeaderBox">
+            <h3 id="summaryHeaderTitle">✓ Respuestas Registradas Correctamente</h3>
+            <p id="summaryHeaderText" style="margin:0; font-size: 0.9rem;">Tus respuestas han sido enviadas. ¡Gracias por participar!</p>
+            <p id="ageSummaryText" style="margin:5px 0 0 0; font-size: 0.85rem;"></p>
+        </div>
+
+        <h3 style="color: var(--primary); margin-bottom: 10px;">Resumen Individualizado:</h3>
+        
+        <table class="db-table">
+            <thead>
+                <tr>
+                    <th style="width: 20%;">Pregunta</th>
+                    <th style="width: 10%;">Opción</th>
+                    <th>Respuesta Seleccionada</th>
+                    <th style="width: 25%;">Evaluación</th>
+                </tr>
+            </thead>
+            <tbody id="dbTableBody"></tbody>
+        </table>
+
+        <!-- PANEL DE ADMINISTRADOR (solo visible si el modo admin está activo) -->
+        <div id="adminControls" class="card admin-panel-card" style="display:none; margin-top:20px;">
+            <h3 style="color: var(--primary); margin-top:0;">🛠 Panel de Administrador</h3>
+            <p style="font-size:0.9rem; margin-bottom:15px;">El modo admin está activo en este dispositivo. Esta respuesta <strong>no</strong> se ha enviado automáticamente. Decide qué hacer:</p>
+            <button type="button" class="btn-submit btn-admin-send" id="adminSendBtn" onclick="adminSendToFormspree()">📤 Enviar esta respuesta a Formspree</button>
+            <button type="button" class="btn-submit btn-admin-redo" onclick="adminRedoSurvey()">🔄 Rehacer encuesta (nueva respuesta)</button>
+            <button type="button" class="btn-submit btn-admin-off" onclick="adminDeactivate()">🚫 Desactivar modo admin</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const surveyData = {
+        "sections": [
+            {
+                "section_title": "PARTE 1: Un vistazo al conocimiento histórico de la ciudad",
+                "questions": [
+                    {
+                        "id": "p1",
+                        "type": "conditional_buttons",
+                        "correct": "A",
+                        "text": "1. ¿Conoces el nombre con el que fue fundada oficialmente la ciudad en el año 1675?",
+                        "options": [
+                            {"val": "A", "text": "Villa de Nuestra Señora de la Candelaria de Medellín"},
+                            {"val": "B", "text": "Villa de San Jerónimo del Ríonegro"},
+                            {"val": "C", "text": "Valle de los Aburráes"},
+                            {"val": "D", "text": "San José del Valle de Aburrá"}
+                        ]
+                    },
+                    {
+                        "id": "p2",
+                        "type": "conditional_buttons",
+                        "correct": "A",
+                        "text": "2. ¿Sabes quiénes fueron los habitantes originarios de este territorio antes de la llegada de los españoles?",
+                        "options": [
+                            {"val": "A", "text": "Indígenas Aburráes"},
+                            {"val": "B", "text": "Indígenas Muiscas"},
+                            {"val": "C", "text": "Indígenas Quimbayas"},
+                            {"val": "D", "text": "Indígenas Nutabes"}
+                        ]
+                    },
+                    {
+                        "id": "p3",
+                        "type": "conditional_buttons",
+                        "correct": "A",
+                        "text": "3. ¿Conoces qué industria fue el motor principal del desarrollo económico e industrial de Medellín a mediados del siglo XX?",
+                        "options": [
+                            {"val": "A", "text": "La industria textil"},
+                            {"val": "B", "text": "La minería de oro"},
+                            {"val": "C", "text": "La exportación bananera"},
+                            {"val": "D", "text": "La industria automotriz"}
+                        ]
+                    },
+                    {
+                        "id": "p4",
+                        "type": "conditional_buttons",
+                        "correct": "A",
+                        "text": "4. ¿Sabes en qué año se celebró la primera edición de la Feria de las Flores?",
+                        "options": [
+                            {"val": "A", "text": "1957"},
+                            {"val": "B", "text": "1975"},
+                            {"val": "C", "text": "1990"},
+                            {"val": "D", "text": "1968"}
+                        ]
+                    },
+                    {
+                        "id": "p5",
+                        "type": "conditional_buttons",
+                        "correct": "C",
+                        "text": "5. ¿Conoces en qué década comenzó sus operaciones el sistema Metro de Medellín?",
+                        "options": [
+                            {"val": "A", "text": "Década de 1970"},
+                            {"val": "B", "text": "Década de 1980"},
+                            {"val": "C", "text": "Década de 1990 (1995)"},
+                            {"val": "D", "text": "Década de 2000"}
+                        ]
+                    }
+                ]
+            },
+            {
+                "section_title": "PARTE 2: Percepción y vivencia sobre la ciudad",
+                "questions": [
+                    {
+                        "id": "p6",
+                        "type": "single_choice",
+                        "correct": null,
+                        "text": "6. Cuando piensas en la historia de Medellín, ¿qué símbolo o lugar sientes que representa mejor su transformación?",
+                        "options": [
+                            {"val": "A", "text": "El sistema Metro y Metrocable"},
+                            {"val": "B", "text": "El Museo de Antioquia y la Plaza Botero"},
+                            {"val": "C", "text": "La Comuna 13 y sus escaleras eléctricas"},
+                            {"val": "D", "text": "El Pueblito Paisa"},
+                            {"val": "E", "text": "Otra opción / Respuesta libre", "isCustom": true}
+                        ]
+                    },
+                    {
+                        "id": "p7",
+                        "type": "single_choice",
+                        "correct": null,
+                        "text": "7. ¿Cuál consideras que ha sido el mayor valor o cualidad de la gente de Medellín a lo largo de su historia?",
+                        "options": [
+                            {"val": "A", "text": "La resiliencia (capacidad de superar la adversidad)"},
+                            {"val": "B", "text": "El espíritu emprendedor y de trabajo"},
+                            {"val": "C", "text": "La amabilidad y hospitalidad"},
+                            {"val": "D", "text": "El sentido de pertenencia por la ciudad"},
+                            {"val": "E", "text": "Otra opción / Respuesta libre", "isCustom": true}
+                        ]
+                    },
+                    {
+                        "id": "p8",
+                        "type": "single_choice",
+                        "correct": null,
+                        "text": "8. En tu opinión, ¿cuál de estos periodos históricos de la ciudad debería enseñarse más en los colegios?",
+                        "options": [
+                            {"val": "A", "text": "La época indígena y la fundación colonial"},
+                            {"val": "B", "text": "El desarrollo industrial y la llegada del ferrocarril"},
+                            {"val": "C", "text": "La época de la crisis de violencia (80/90) y la memoria histórica"},
+                            {"val": "D", "text": "El proceso de innovación urbana y social del siglo XXI"},
+                            {"val": "E", "text": "Otra opción / Respuesta libre", "isCustom": true}
+                        ]
+                    },
+                    {
+                        "id": "p9",
+                        "type": "single_choice",
+                        "correct": null,
+                        "text": "9. ¿Crees que la Medellín actual conserva la esencia y tradiciones de la Medellín del pasado?",
+                        "options": [
+                            {"val": "A", "text": "Sí, se conservan intactas"},
+                            {"val": "B", "text": "Se conservan solo en algunas tradiciones (como la Feria de las Flores o la gastronomía)"},
+                            {"val": "C", "text": "Muy poco, la ciudad ha cambiado demasiado"},
+                            {"val": "D", "text": "No estoy seguro/a"},
+                            {"val": "E", "text": "Otra opción / Respuesta libre", "isCustom": true}
+                        ]
+                    },
+                    {
+                        "id": "p10",
+                        "type": "single_choice",
+                        "correct": null,
+                        "text": "10. ¿Por qué medio prefieres conectar o aprender sobre la historia de la ciudad?",
+                        "options": [
+                            {"val": "A", "text": "Relatos de adultos mayores o historias familiares"},
+                            {"val": "B", "text": "Redes sociales, videos y contenido digital"},
+                            {"val": "C", "text": "Visitas a museos, recorridos urbanos y memoria del barrio"},
+                            {"val": "D", "text": "Libros, documentales y proyectos escolares"},
+                            {"val": "E", "text": "Otra opción / Respuesta libre", "isCustom": true}
+                        ]
+                    }
+                ]
+            }
+        ]
+    };
+
+    let userAnswers = {};
+    let customTextValues = {};
+    let userAge = null;
+
+    // Utilidad de depuración manual en consola: escribe resetForm() en F12
+    window.resetForm = function() {
+        localStorage.removeItem('abp_survey_completed');
+        localStorage.removeItem('abp_admin_mode');
+        location.reload();
+    };
+
+    function checkPreviousSubmission() {
+        const isAdmin = localStorage.getItem('abp_admin_mode') === 'true';
+        if (isAdmin) {
+            document.getElementById('adminBanner').style.display = 'block';
+            // En modo admin nunca se bloquea el dispositivo: siempre se puede
+            // volver a hacer la encuesta desde cero.
+            return false;
+        }
+
+        const savedAnswers = localStorage.getItem('abp_survey_completed');
+        if (savedAnswers) {
+            try {
+                const parsedData = JSON.parse(savedAnswers);
+                userAnswers = parsedData.userAnswers || {};
+                customTextValues = parsedData.customTextValues || {};
+                userAge = parsedData.userAge || null;
+
+                document.getElementById('consentStep').style.display = 'none';
+                document.getElementById('surveyForm').style.display = 'none';
+                document.getElementById('alreadyNotice').style.display = 'block';
+
+                renderResultsTable();
+                updateSummaryHeader(true);
+                document.getElementById('resultsPanel').style.display = 'block';
+                return true;
+            } catch (e) {
+                localStorage.removeItem('abp_survey_completed');
+            }
+        }
+        return false;
+    }
+
+    function toggleStartBtn() {
+        const check = document.getElementById('voiceAuthCheck');
+        document.getElementById('startBtn').disabled = !check.checked;
+    }
+
+    // Tras aceptar el consentimiento, se pide la edad antes de mostrar la encuesta
+    function startSurvey() {
+        document.getElementById('consentStep').style.display = 'none';
+        document.getElementById('ageInput').value = '';
+        document.getElementById('ageContinueBtn').disabled = true;
+        document.getElementById('ageModal').style.display = 'flex';
+    }
+
+    function validateAge() {
+        const val = parseInt(document.getElementById('ageInput').value, 10);
+        document.getElementById('ageContinueBtn').disabled = !(val >= 1 && val <= 119);
+    }
+
+    function confirmAge() {
+        userAge = document.getElementById('ageInput').value;
+        document.getElementById('edadHiddenInput').value = userAge;
+        document.getElementById('ageModal').style.display = 'none';
+        document.getElementById('surveyForm').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderSurvey() {
+        const container = document.getElementById('questionsContainer');
+        container.innerHTML = '';
+
+        surveyData.sections.forEach((sec) => {
+            const secTitle = document.createElement('div');
+            secTitle.className = 'section-title';
+            secTitle.innerText = sec.section_title;
+            container.appendChild(secTitle);
+
+            sec.questions.forEach(q => {
+                const qCard = document.createElement('div');
+                qCard.className = 'card question-item';
+                
+                const qTitle = document.createElement('div');
+                qTitle.className = 'question-title';
+                qTitle.innerText = q.text;
+                qCard.appendChild(qTitle);
+
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = `Pregunta_${q.id}`;
+                hiddenInput.id = `input_${q.id}`;
+                qCard.appendChild(hiddenInput);
+
+                if (q.type === 'conditional_buttons') {
+                    const ynGroup = document.createElement('div');
+                    ynGroup.className = 'yn-group';
+
+                    const btnYes = document.createElement('button');
+                    btnYes.type = 'button';
+                    btnYes.className = 'yn-btn';
+                    btnYes.innerText = 'Sí';
+
+                    const btnNo = document.createElement('button');
+                    btnNo.type = 'button';
+                    btnNo.className = 'yn-btn';
+                    btnNo.innerText = 'No';
+
+                    const subOptionsGroup = document.createElement('div');
+                    subOptionsGroup.className = 'sub-options-container';
+
+                    q.options.forEach(opt => {
+                        const optBtn = document.createElement('div');
+                        optBtn.className = 'option-btn';
+
+                        const radio = document.createElement('div');
+                        radio.className = 'radio-dot';
+
+                        const label = document.createElement('span');
+                        label.innerText = `${opt.val}) ${opt.text}`;
+
+                        optBtn.appendChild(radio);
+                        optBtn.appendChild(label);
+
+                        optBtn.onclick = () => {
+                            Array.from(subOptionsGroup.children).forEach(c => c.classList.remove('selected'));
+                            optBtn.classList.add('selected');
+                            userAnswers[q.id] = { hasKnowledge: true, selectedVal: opt.val };
+                            hiddenInput.value = `Sí - (${opt.val}) ${opt.text}`;
+                        };
+
+                        subOptionsGroup.appendChild(optBtn);
+                    });
+
+                    btnYes.onclick = () => {
+                        btnYes.classList.add('selected');
+                        btnNo.classList.remove('selected');
+                        subOptionsGroup.style.display = 'block';
+                        userAnswers[q.id] = { hasKnowledge: true, selectedVal: null };
+                        hiddenInput.value = 'Sí - Sin opción elegida';
+                    };
+
+                    btnNo.onclick = () => {
+                        btnNo.classList.add('selected');
+                        btnYes.classList.remove('selected');
+                        subOptionsGroup.style.display = 'none';
+                        Array.from(subOptionsGroup.children).forEach(c => c.classList.remove('selected'));
+                        userAnswers[q.id] = { hasKnowledge: false, selectedVal: 'NO' };
+                        hiddenInput.value = 'No conoce / No sabe';
+                    };
+
+                    ynGroup.appendChild(btnYes);
+                    ynGroup.appendChild(btnNo);
+                    qCard.appendChild(ynGroup);
+                    qCard.appendChild(subOptionsGroup);
+
+                } else {
+                    const optsGroup = document.createElement('div');
+                    optsGroup.className = 'options-group';
+
+                    let customInput = null;
+
+                    q.options.forEach(opt => {
+                        const optBtn = document.createElement('div');
+                        optBtn.className = 'option-btn';
+
+                        const radio = document.createElement('div');
+                        radio.className = 'radio-dot';
+
+                        const label = document.createElement('span');
+                        label.innerText = opt.text;
+
+                        optBtn.appendChild(radio);
+                        optBtn.appendChild(label);
+
+                        if (opt.isCustom) {
+                            customInput = document.createElement('input');
+                            customInput.type = 'text';
+                            customInput.className = 'custom-text-input';
+                            customInput.placeholder = 'Escribe tu respuesta libre aquí...';
+                            customInput.oninput = (e) => {
+                                customTextValues[q.id] = e.target.value;
+                                hiddenInput.value = `(${opt.val}) Libre: ${e.target.value}`;
+                            };
+                            optBtn.appendChild(customInput);
+                        }
+
+                        optBtn.onclick = (e) => {
+                            if (e.target === customInput) return;
+                            selectOption(q.id, opt.val, optBtn, optsGroup, opt.isCustom, customInput, hiddenInput, opt.text);
+                        };
+
+                        optsGroup.appendChild(optBtn);
+                    });
+
+                    qCard.appendChild(optsGroup);
+                }
+
+                container.appendChild(qCard);
+            });
+        });
+    }
+
+    function selectOption(qId, val, btn, group, isCustom, customInput, hiddenInput, optText) {
+        userAnswers[qId] = val;
+        
+        Array.from(group.children).forEach(child => {
+            child.classList.remove('selected');
+            const inp = child.querySelector('.custom-text-input');
+            if (inp) inp.style.display = 'none';
+        });
+
+        btn.classList.add('selected');
+
+        if (isCustom && customInput) {
+            customInput.style.display = 'block';
+            customInput.focus();
+            hiddenInput.value = `(${val}) Libre: ${customInput.value}`;
+        } else {
+            hiddenInput.value = `(${val}) ${optText}`;
+        }
+    }
+
+    function renderResultsTable() {
+        const tableBody = document.getElementById('dbTableBody');
+        tableBody.innerHTML = '';
+
+        let qIndex = 1;
+        surveyData.sections.forEach(sec => {
+            sec.questions.forEach(q => {
+                const answerData = userAnswers[q.id];
+                let selectedVal = '';
+                let cleanAnswerText = '';
+                let evalBadgeHtml = '';
+
+                if (q.type === 'conditional_buttons') {
+                    if (!answerData || !answerData.hasKnowledge) {
+                        selectedVal = 'NO';
+                        cleanAnswerText = 'No conoce / No sabe';
+                        evalBadgeHtml = `<span class="badge-status badge-incorrect">✗ NO SABE</span>`;
+                    } else {
+                        selectedVal = answerData.selectedVal;
+                        const optObj = q.options.find(o => o.val === selectedVal);
+                        cleanAnswerText = optObj ? optObj.text : 'Opción no válida';
+
+                        if (selectedVal === q.correct) {
+                            evalBadgeHtml = `<span class="badge-status badge-correct">✓ BIEN</span>`;
+                        } else {
+                            evalBadgeHtml = `<span class="badge-status badge-incorrect">✗ MAL</span>`;
+                        }
+                    }
+                } else {
+                    selectedVal = answerData;
+                    const optObj = q.options.find(o => o.val === selectedVal);
+                    cleanAnswerText = optObj ? optObj.text : 'No respondida';
+                    
+                    if (optObj && optObj.isCustom) {
+                        cleanAnswerText = customTextValues[q.id] ? customTextValues[q.id].trim() : 'Respuesta libre';
+                    }
+
+                    evalBadgeHtml = `<span class="badge-status badge-opinion">OPINIÓN</span>`;
+                }
+
+                const row = document.createElement('tr');
+                row.innerHTML = `<td><strong>Pregunta ${qIndex}</strong></td>` +
+                                `<td><b style="color: var(--primary);">${selectedVal || '-'}</b></td>` +
+                                `<td>${cleanAnswerText}</td>` +
+                                `<td>${evalBadgeHtml}</td>`;
+                tableBody.appendChild(row);
+
+                qIndex++;
+            });
+        });
+    }
+
+    // Actualiza el cuadro de resumen según si la respuesta ya se envió o no
+    function updateSummaryHeader(sent) {
+        const title = document.getElementById('summaryHeaderTitle');
+        const text = document.getElementById('summaryHeaderText');
+        const ageText = document.getElementById('ageSummaryText');
+
+        if (sent) {
+            title.innerText = '✓ Respuestas Registradas Correctamente';
+            text.innerText = 'Tus respuestas han sido enviadas. ¡Gracias por participar!';
+        } else {
+            title.innerText = '🛠 Respuesta preparada (modo admin)';
+            text.innerText = 'Esta respuesta todavía NO se ha enviado a Formspree. Usa el panel de administrador de abajo.';
+        }
+
+        ageText.innerText = userAge ? `Edad indicada: ${userAge} años` : '';
+    }
+
+    // Busca en las respuestas libres si hay una palabra clave para activar/desactivar el modo admin
+    function checkAdminTriggers() {
+        for (let key in customTextValues) {
+            const val = (customTextValues[key] || '').trim().toLowerCase();
+            if (val === 'admin_panel') return 'ON';
+            if (val === 'off') return 'OFF';
+        }
+        return null;
+    }
+
+    async function submitSurvey() {
+        const trigger = checkAdminTriggers();
+
+        if (trigger === 'ON') {
+            localStorage.setItem('abp_admin_mode', 'true');
+            alert('🛠 MODO ADMIN ACTIVADO en este dispositivo.\n\nNo se ha enviado nada a Formspree. La página se reiniciará.');
+            location.reload();
+            return;
+        }
+
+        if (trigger === 'OFF') {
+            localStorage.removeItem('abp_admin_mode');
+            alert('Modo admin DESACTIVADO en este dispositivo.\n\nNo se ha enviado nada a Formspree. La página se reiniciará.');
+            location.reload();
+            return;
+        }
+
+        let answeredCount = Object.keys(userAnswers).length;
+        if (answeredCount < 10) {
+            alert('Por favor responde las 10 preguntas antes de enviar.');
+            return;
+        }
+
+        for (let qId in userAnswers) {
+            const ans = userAnswers[qId];
+            if (typeof ans === 'object' && ans.hasKnowledge && !ans.selectedVal) {
+                alert('Seleccionaste "Sí" en una de las preguntas pero no elegiste cuál opción crees que es.');
+                return;
+            }
+            if (ans === 'E' && (!customTextValues[qId] || customTextValues[qId].trim() === '')) {
+                alert('Has seleccionado respuesta libre en una de las preguntas, por favor escribe tu respuesta.');
+                return;
+            }
+        }
+
+        const isAdmin = localStorage.getItem('abp_admin_mode') === 'true';
+
+        renderResultsTable();
+        document.getElementById('surveyForm').style.display = 'none';
+        document.getElementById('resultsPanel').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        if (isAdmin) {
+            // En modo admin no se envía automáticamente: se muestra el panel de control
+            updateSummaryHeader(false);
+            const adminSendBtn = document.getElementById('adminSendBtn');
+            adminSendBtn.disabled = false;
+            adminSendBtn.innerText = '📤 Enviar esta respuesta a Formspree';
+            document.getElementById('adminControls').style.display = 'block';
+            return;
+        }
+
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Enviando respuestas...';
+
+        const form = document.getElementById('surveyForm');
+        const formData = new FormData(form);
+
+        try {
+            await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.error('Error enviando a Formspree:', error);
+        }
+
+        // Marcar este dispositivo como completado para impedir nuevos envíos
+        localStorage.setItem('abp_survey_completed', JSON.stringify({
+            userAnswers: userAnswers,
+            customTextValues: customTextValues,
+            userAge: userAge
+        }));
+
+        updateSummaryHeader(true);
+    }
+
+    // --- Funciones exclusivas del panel de administrador ---
+
+    async function adminSendToFormspree() {
+        const btn = document.getElementById('adminSendBtn');
+        btn.disabled = true;
+        btn.innerText = 'Enviando...';
+
+        const form = document.getElementById('surveyForm');
+        const formData = new FormData(form);
+
+        try {
+            await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            btn.innerText = '✓ Enviado correctamente';
+            updateSummaryHeader(true);
+        } catch (error) {
+            console.error('Error enviando a Formspree:', error);
+            btn.innerText = '✗ Error, reintentar';
+            btn.disabled = false;
+        }
+    }
+
+    function adminRedoSurvey() {
+        userAnswers = {};
+        customTextValues = {};
+        userAge = null;
+
+        document.getElementById('resultsPanel').style.display = 'none';
+        document.getElementById('adminControls').style.display = 'none';
+        document.getElementById('alreadyNotice').style.display = 'none';
+
+        renderSurvey();
+
+        document.getElementById('surveyForm').style.display = 'none';
+        document.getElementById('edadHiddenInput').value = '';
+        document.getElementById('ageInput').value = '';
+        document.getElementById('ageContinueBtn').disabled = true;
+        document.getElementById('voiceAuthCheck').checked = false;
+        document.getElementById('startBtn').disabled = true;
+        document.getElementById('consentStep').style.display = 'block';
+
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = false;
+        submitBtn.innerText = 'Enviar Respuestas y Ver Resultados';
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function adminDeactivate() {
+        localStorage.removeItem('abp_admin_mode');
+        alert('Modo admin desactivado en este dispositivo.');
+        location.reload();
+    }
+
+    // Inicialización
+    if (!checkPreviousSubmission()) {
+        renderSurvey();
+    }
+</script>
+
+</body>
+</html>
