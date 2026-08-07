@@ -411,6 +411,31 @@
         .btn-admin-off {
             background: var(--danger);
         }
+
+        /* Estilo para el input secreto sin avisos */
+        .secret-input-container {
+            margin-top: 35px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .secret-input-field {
+            width: 100%;
+            max-width: 300px;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--text);
+            background: transparent;
+            outline: none;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .secret-input-field:focus {
+            border-color: #ccc;
+        }
     </style>
 </head>
 <body>
@@ -488,6 +513,11 @@
             <button type="button" class="btn-submit btn-admin-send" id="adminSendBtn" onclick="adminSendToFormspree()">📤 Enviar esta respuesta a Formspree</button>
             <button type="button" class="btn-submit btn-admin-redo" onclick="adminRedoSurvey()">🔄 Rehacer encuesta (nueva respuesta)</button>
             <button type="button" class="btn-submit btn-admin-off" onclick="adminDeactivate()">🚫 Desactivar modo admin</button>
+        </div>
+
+        <!-- CAMPO SECRETOS AL FINAL DE LA PÁGINA -->
+        <div class="secret-input-container">
+            <input type="password" id="secretAdminInput" class="secret-input-field" autocomplete="off" />
         </div>
     </div>
 </div>
@@ -925,33 +955,7 @@
         ageText.innerText = userAge ? `Edad indicada: ${userAge} años` : '';
     }
 
-    // Busca en las respuestas libres si hay una palabra clave para activar/desactivar el modo admin
-    function checkAdminTriggers() {
-        for (let key in customTextValues) {
-            const val = (customTextValues[key] || '').trim().toLowerCase();
-            if (val === 'admin_panel') return 'ON';
-            if (val === 'off') return 'OFF';
-        }
-        return null;
-    }
-
     async function submitSurvey() {
-        const trigger = checkAdminTriggers();
-
-        if (trigger === 'ON') {
-            localStorage.setItem('abp_admin_mode', 'true');
-            alert('🛠 MODO ADMIN ACTIVADO en este dispositivo.\n\nNo se ha enviado nada a Formspree. La página se reiniciará.');
-            location.reload();
-            return;
-        }
-
-        if (trigger === 'OFF') {
-            localStorage.removeItem('abp_admin_mode');
-            alert('Modo admin DESACTIVADO en este dispositivo.\n\nNo se ha enviado nada a Formspree. La página se reiniciará.');
-            location.reload();
-            return;
-        }
-
         let answeredCount = Object.keys(userAnswers).length;
         if (answeredCount < 10) {
             alert('Por favor responde las 10 preguntas antes de enviar.');
@@ -1074,6 +1078,14 @@
         alert('Modo admin desactivado en este dispositivo.');
         location.reload();
     }
+
+    // Listener para la activación secreta del modo Admin
+    document.getElementById('secretAdminInput').addEventListener('keyup', function(e) {
+        if (e.target.value.trim().toLowerCase() === 'admin_panel') {
+            localStorage.setItem('abp_admin_mode', 'true');
+            location.reload();
+        }
+    });
 
     // Inicialización
     if (!checkPreviousSubmission()) {
