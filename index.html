@@ -42,23 +42,10 @@
             text-align: center;
         }
 
-        h1 {
-            font-size: 1.6rem;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
+        h1 { font-size: 1.6rem; margin-bottom: 8px; font-weight: 600; }
+        p.subtitle { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 28px; }
 
-        p.subtitle {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-bottom: 28px;
-        }
-
-        .links-container {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
+        .links-container { display: flex; flex-direction: column; gap: 16px; }
 
         .btn-link {
             display: flex;
@@ -73,13 +60,10 @@
             font-size: 1rem;
             transition: all 0.2s ease-in-out;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn-1 {
             background: linear-gradient(135deg, #6366f1, var(--accent-purple));
         }
 
-        .btn-2 {
+        .btn-link:nth-child(even) {
             background: linear-gradient(135deg, #06b6d4, var(--accent-blue));
         }
 
@@ -89,49 +73,75 @@
             opacity: 0.95;
         }
 
-        .btn-link:active {
-            transform: translateY(0);
-        }
-
-        .icon {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-        }
-
-        footer {
-            margin-top: 25px;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
+        .btn-link:active { transform: translateY(0); }
+        .icon { width: 20px; height: 20px; fill: currentColor; }
+        .message { color: var(--text-muted); font-size: 0.95rem; }
+        footer { margin-top: 25px; font-size: 0.8rem; color: var(--text-muted); }
     </style>
 </head>
 <body>
-
     <div class="container">
         <h1>Enlaces de Acceso</h1>
         <p class="subtitle">Selecciona el enlace al que deseas ingresar:</p>
-
-        <div class="links-container">
-            <a href="https://canva.link/vhfsblwoklahsmp" target="_blank" rel="noopener noreferrer" class="btn-link btn-1">
-                <svg class="icon" viewBox="0 0 24 24">
-                    <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
-                </svg>
-                Madrid
-            </a>
-
-            <a href="https://canva.link/atx7w54cs1c41sg" target="_blank" rel="noopener noreferrer" class="btn-link btn-2">
-                <svg class="icon" viewBox="0 0 24 24">
-                    <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
-                </svg>
-                Ricardo Kaká
-            </a>
+        <div id="links" class="links-container" aria-live="polite">
+            <p class="message">Cargando enlaces...</p>
         </div>
-
-        <footer>
-            Presiona cualquiera de los botones para abrir en una nueva pestaña.
-        </footer>
+        <footer>Presiona cualquiera de los botones para abrir en una nueva pestaña.</footer>
     </div>
 
+    <script>
+        const linksContainer = document.getElementById('links');
+
+        function normalizarPaginas(data) {
+            // Admite un array de URLs o un objeto con nombre y URL:
+            // ["https://youtube.com"]
+            // [{"name":"YouTube","url":"https://youtube.com"}]
+            const paginas = Array.isArray(data) ? data : (data.pages || []);
+            return paginas.map((pagina) => {
+                if (typeof pagina === 'string') {
+                    return { name: pagina, url: pagina };
+                }
+                return {
+                    name: pagina.name || pagina.title || pagina.url,
+                    url: pagina.url || pagina.href
+                };
+            }).filter((pagina) => pagina.name && pagina.url);
+        }
+
+        function crearBoton(pagina) {
+            const enlace = document.createElement('a');
+            enlace.className = 'btn-link';
+            enlace.href = pagina.url.match(/^https?:\/\//i) ? pagina.url : `https://${pagina.url}`;
+            enlace.target = '_blank';
+            enlace.rel = 'noopener noreferrer';
+            enlace.innerHTML = `
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+                </svg>
+                <span></span>
+            `;
+            enlace.querySelector('span').textContent = pagina.name;
+            return enlace;
+        }
+
+        fetch('pages.json')
+            .then((respuesta) => {
+                if (!respuesta.ok) throw new Error('No se pudo cargar pages.json');
+                return respuesta.json();
+            })
+            .then((data) => {
+                const paginas = normalizarPaginas(data);
+                linksContainer.replaceChildren();
+                if (paginas.length === 0) {
+                    linksContainer.innerHTML = '<p class="message">No hay enlaces configurados.</p>';
+                    return;
+                }
+                paginas.forEach((pagina) => linksContainer.appendChild(crearBoton(pagina)));
+            })
+            .catch((error) => {
+                console.error(error);
+                linksContainer.innerHTML = '<p class="message">No se pudieron cargar los enlaces.</p>';
+            });
+    </script>
 </body>
 </html>
