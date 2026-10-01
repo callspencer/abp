@@ -122,7 +122,7 @@
             cursor: not-allowed;
         }
 
-        /* Popup de edad */
+        /* Modal de edad */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -208,7 +208,6 @@
             cursor: pointer;
             transition: all 0.2s ease;
             font-size: 0.95rem;
-            flex-wrap: wrap;
             margin-bottom: 8px;
         }
 
@@ -322,7 +321,6 @@
             border: 1px solid #81d4fa;
         }
 
-        /* Panel de administrador */
         .admin-panel-card {
             border: 2px dashed var(--primary);
             background: #fbfdf9;
@@ -340,7 +338,6 @@
             background: var(--danger);
         }
 
-        /* Estilo para el input secreto sin avisos */
         .secret-input-container {
             margin-top: 35px;
             width: 100%;
@@ -360,10 +357,6 @@
             box-sizing: border-box;
             text-align: center;
         }
-
-        .secret-input-field:focus {
-            border-color: #ccc;
-        }
     </style>
 </head>
 <body>
@@ -381,32 +374,32 @@
         <h2 style="margin-top:0; color: var(--primary); font-size: 1.2rem;">Consentimiento Informado y Participación</h2>
         
         <div class="consent-box">
-            Al realizar esta encuesta usted tiene una participación <strong>100% voluntaria</strong> y tiene derecho a retirarse en cualquier momento o a no responder preguntas que considere inadecuadas. Esta encuesta es <strong>totalmente anónima.</strong> No se recopilará ni divulgará ningún dato personal o de identificación a ninguna entidad, ya sea educativa, legal o de otra índole. La información proporcionada se utilizará exclusivamente para los fines de este estudio.
+            Al realizar esta encuesta usted tiene una participación <strong>100% voluntaria</strong> y tiene derecho a retirarse en cualquier momento o a no responder preguntas que considere inadecuadas. Esta encuesta es <strong>totalmente anónima.</strong> No se recopilará ni divulgará ningún dato personal o de identificación a ninguna entidad. La información proporcionada se utilizará exclusivamente para los fines de este estudio.
         </div>
 
         <label class="checkbox-container">
-            <input type="checkbox" id="voiceAuthCheck" onchange="toggleStartBtn()">
+            <input type="checkbox" id="voiceAuthCheck">
             <span>Acepto <strong>participar voluntariamente</strong> en esta actividad académica del proyecto ABP.</span>
         </label>
 
-        <button id="startBtn" class="btn-start" disabled onclick="startSurvey()">Comenzar Encuesta</button>
+        <button id="startBtn" class="btn-start" disabled>Comenzar Encuesta</button>
     </div>
 
-    <!-- POPUP DE EDAD -->
+    <!-- MODAL DE EDAD -->
     <div id="ageModal" class="modal-overlay">
         <div class="modal-box">
             <h2>Antes de comenzar</h2>
             <p style="font-size:0.9rem; color: var(--text);">Indícanos tu edad. Este dato es anónimo y solo se usa con fines estadísticos del proyecto.</p>
-            <input type="number" id="ageInput" min="1" max="119" placeholder="Ej: 15" oninput="validateAge()">
-            <button id="ageContinueBtn" class="btn-start" disabled onclick="confirmAge()">Continuar</button>
+            <input type="number" id="ageInput" min="1" max="119" placeholder="Ej: 15">
+            <button id="ageContinueBtn" class="btn-start" disabled>Continuar</button>
         </div>
     </div>
 
-    <!-- FORMULARIO CONECTADO A FORMSPREE -->
+    <!-- FORMULARIO FORMSPREE -->
     <form id="surveyForm" action="https://formspree.io/f/mrpzzvwl" method="POST">
         <input type="hidden" name="Edad" id="edadHiddenInput">
         <div id="questionsContainer"></div>
-        <button type="button" class="btn-submit" id="submitBtn" onclick="submitSurvey()">Enviar Respuestas y Ver Resultados</button>
+        <button type="button" class="btn-submit" id="submitBtn">Enviar Respuestas y Ver Resultados</button>
     </form>
 
     <div id="resultsPanel" class="card results-panel">
@@ -437,13 +430,12 @@
         <!-- PANEL DE ADMINISTRADOR -->
         <div id="adminControls" class="card admin-panel-card" style="display:none; margin-top:20px;">
             <h3 style="color: var(--primary); margin-top:0;">🛠 Panel de Administrador</h3>
-            <p style="font-size:0.9rem; margin-bottom:15px;">El modo admin está activo en este dispositivo. Esta respuesta <strong>no</strong> se ha enviado automáticamente. Decide qué hacer:</p>
-            <button type="button" class="btn-submit btn-admin-send" id="adminSendBtn" onclick="adminSendToFormspree()">📤 Enviar esta respuesta a Formspree</button>
-            <button type="button" class="btn-submit btn-admin-redo" onclick="adminRedoSurvey()">🔄 Rehacer encuesta (nueva respuesta)</button>
-            <button type="button" class="btn-submit btn-admin-off" onclick="adminDeactivate()">🚫 Desactivar modo admin</button>
+            <p style="font-size:0.9rem; margin-bottom:15px;">El modo admin está activo en este dispositivo. Esta respuesta <strong>no</strong> se ha enviado automáticamente.</p>
+            <button type="button" class="btn-submit btn-admin-send" id="adminSendBtn">📤 Enviar esta respuesta a Formspree</button>
+            <button type="button" class="btn-submit btn-admin-redo" id="adminRedoBtn">🔄 Rehacer encuesta (nueva respuesta)</button>
+            <button type="button" class="btn-submit btn-admin-off" id="adminOffBtn">🚫 Desactivar modo admin</button>
         </div>
 
-        <!-- CAMPO SECRETO AL FINAL DE LA PÁGINA -->
         <div class="secret-input-container">
             <input type="password" id="secretAdminInput" class="secret-input-field" autocomplete="off" />
         </div>
@@ -458,7 +450,6 @@
                 "questions": [
                     {
                         "id": "p1",
-                        "type": "single_choice",
                         "text": "1. En promedio, ¿cuántas horas al día pasas en redes sociales?",
                         "options": [
                             {"val": "A", "text": "Menos de una hora"},
@@ -469,7 +460,6 @@
                     },
                     {
                         "id": "p2",
-                        "type": "single_choice",
                         "text": "2. Impacto en el estado de ánimo: ¿Con qué frecuencia te comparas con la vida que muestran otras personas en las redes sociales?",
                         "options": [
                             {"val": "A", "text": "Siempre"},
@@ -480,7 +470,6 @@
                     },
                     {
                         "id": "p3",
-                        "type": "single_choice",
                         "text": "3. Presión social y expectativas: ¿Sientes que el contenido que ves en redes sociales te presiona a querer comprar cosas o cambiar tu apariencia física?",
                         "options": [
                             {"val": "A", "text": "Sí"},
@@ -490,7 +479,6 @@
                     },
                     {
                         "id": "p4",
-                        "type": "single_choice",
                         "text": "4. Percepción del éxito según los likes: ¿Qué tan de acuerdo estás con la frase: 'Tener muchos seguidores o likes es sinónimo de ser alguien exitoso en la vida'?",
                         "options": [
                             {"val": "A", "text": "Totalmente de acuerdo"},
@@ -507,11 +495,56 @@
     let userAnswers = {};
     let userAge = null;
 
-    window.resetForm = function() {
-        localStorage.removeItem('abp_survey_completed');
-        localStorage.removeItem('abp_admin_mode');
-        location.reload();
-    };
+    document.addEventListener("DOMContentLoaded", function () {
+        const voiceCheck = document.getElementById('voiceAuthCheck');
+        const startBtn = document.getElementById('startBtn');
+        const ageInput = document.getElementById('ageInput');
+        const ageContinueBtn = document.getElementById('ageContinueBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const secretAdminInput = document.getElementById('secretAdminInput');
+
+        // Event listeners para controles
+        voiceCheck.addEventListener('change', function() {
+            startBtn.disabled = !this.checked;
+        });
+
+        startBtn.addEventListener('click', function() {
+            document.getElementById('consentStep').style.display = 'none';
+            ageInput.value = '';
+            ageContinueBtn.disabled = true;
+            document.getElementById('ageModal').style.display = 'flex';
+        });
+
+        ageInput.addEventListener('input', function() {
+            const val = parseInt(this.value, 10);
+            ageContinueBtn.disabled = !(val >= 1 && val <= 119);
+        });
+
+        ageContinueBtn.addEventListener('click', function() {
+            userAge = ageInput.value;
+            document.getElementById('edadHiddenInput').value = userAge;
+            document.getElementById('ageModal').style.display = 'none';
+            document.getElementById('surveyForm').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        submitBtn.addEventListener('click', submitSurvey);
+
+        document.getElementById('adminSendBtn').addEventListener('click', adminSendToFormspree);
+        document.getElementById('adminRedoBtn').addEventListener('click', adminRedoSurvey);
+        document.getElementById('adminOffBtn').addEventListener('click', adminDeactivate);
+
+        secretAdminInput.addEventListener('keyup', function(e) {
+            if (e.target.value.trim().toLowerCase() === 'admin_panel') {
+                localStorage.setItem('abp_admin_mode', 'true');
+                location.reload();
+            }
+        });
+
+        if (!checkPreviousSubmission()) {
+            renderSurvey();
+        }
+    });
 
     function checkPreviousSubmission() {
         const isAdmin = localStorage.getItem('abp_admin_mode') === 'true';
@@ -542,31 +575,6 @@
         return false;
     }
 
-    function toggleStartBtn() {
-        const check = document.getElementById('voiceAuthCheck');
-        document.getElementById('startBtn').disabled = !check.checked;
-    }
-
-    function startSurvey() {
-        document.getElementById('consentStep').style.display = 'none';
-        document.getElementById('ageInput').value = '';
-        document.getElementById('ageContinueBtn').disabled = true;
-        document.getElementById('ageModal').style.display = 'flex';
-    }
-
-    function validateAge() {
-        const val = parseInt(document.getElementById('ageInput').value, 10);
-        document.getElementById('ageContinueBtn').disabled = !(val >= 1 && val <= 119);
-    }
-
-    function confirmAge() {
-        userAge = document.getElementById('ageInput').value;
-        document.getElementById('edadHiddenInput').value = userAge;
-        document.getElementById('ageModal').style.display = 'none';
-        document.getElementById('surveyForm').style.display = 'block';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
     function renderSurvey() {
         const container = document.getElementById('questionsContainer');
         container.innerHTML = '';
@@ -584,10 +592,4 @@
                 const qTitle = document.createElement('div');
                 qTitle.className = 'question-title';
                 qTitle.innerText = q.text;
-                qCard.appendChild(qTitle);
-
-                const hiddenInput = document.createElement('input');
-                hiddenInput.type = 'hidden';
-                hiddenInput.name = `Pregunta_${q.id}`;
-                hiddenInput.id = `input_${q.id}`;
-                qCard.appendChild(hidd
+            
