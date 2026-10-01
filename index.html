@@ -3,145 +3,591 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso a Presentaciones / Enlaces</title>
+    <title>Encuesta sobre Redes Sociales - Equipo #4 ABP 9-A</title>
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent-purple: #7c3aed;
-            --accent-blue: #2563eb;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            --primary: #1f4e5b;
+            --primary-dark: #13333b;
+            --secondary: #e0f2f1;
+            --accent: #2e7d32;
+            --bg: #f4f7f6;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            --border: #e0e0e0;
+            --success: #2e7d32;
+            --danger: #c62828;
+            --neutral: #0277bd;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px 10px;
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 20px;
         }
 
         .container {
+            max-width: 720px;
             width: 100%;
-            max-width: 500px;
-            background-color: var(--card-bg);
-            padding: 35px 25px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .header-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
             text-align: center;
         }
 
-        h1 { font-size: 1.6rem; margin-bottom: 8px; font-weight: 600; }
-        p.subtitle { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 28px; }
+        .header-card h1 {
+            margin: 0 0 8px 0;
+            font-size: 1.6rem;
+        }
 
-        .links-container { display: flex; flex-direction: column; gap: 16px; }
+        .header-card .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            font-weight: 600;
+        }
 
-        .btn-link {
+        .admin-banner {
+            display: none;
+            background: #212121;
+            color: #ffca28;
+            text-align: center;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        .consent-box {
+            background: #fff8e1;
+            border-left: 5px solid #ffa000;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #5d4037;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 15px 0;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .checkbox-container input {
+            margin-top: 3px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        .btn-start {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-start:disabled {
+            background: #b0bec5;
+            cursor: not-allowed;
+        }
+
+        /* Popup de edad */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-box {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            max-width: 380px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
+
+        .modal-box h2 {
+            margin-top: 0;
+            color: var(--primary);
+            font-size: 1.15rem;
+        }
+
+        .modal-box input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            font-family: inherit;
+        }
+
+        .modal-box input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        #surveyForm {
+            display: none;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--primary);
+            background: var(--secondary);
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 25px 0 15px 0;
+            border-left: 5px solid var(--primary);
+        }
+
+        .question-item {
+            margin-bottom: 20px;
+        }
+
+        .question-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #1a252f;
+        }
+
+        .options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .option-btn {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background: #f8fbfb;
+        }
+
+        .option-btn.selected {
+            border-color: var(--primary);
+            background: var(--secondary);
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .radio-dot {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #95a5a6;
+            border-radius: 50%;
+            margin-right: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            padding: 14px 20px;
-            border-radius: 10px;
-            text-decoration: none;
-            color: #ffffff;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            background: linear-gradient(135deg, #6366f1, var(--accent-purple));
+            flex-shrink: 0;
         }
 
-        .btn-link:nth-child(even) {
-            background: linear-gradient(135deg, #06b6d4, var(--accent-blue));
+        .option-btn.selected .radio-dot {
+            border-color: var(--primary);
+            background: var(--primary);
         }
 
-        .btn-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
-            opacity: 0.95;
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
         }
 
-        .btn-link:active { transform: translateY(0); }
-        .icon { width: 20px; height: 20px; fill: currentColor; }
-        .message { color: var(--text-muted); font-size: 0.95rem; }
-        footer { margin-top: 25px; font-size: 0.8rem; color: var(--text-muted); }
+        .btn-submit:disabled {
+            background: #b0bec5;
+            cursor: not-allowed;
+        }
+
+        .results-panel {
+            display: none;
+        }
+
+        .summary-header {
+            background: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #2e7d32;
+        }
+
+        .summary-header h3 {
+            margin: 0 0 5px 0;
+        }
+
+        .already-submitted-notice {
+            background: #e3f2fd;
+            border-left: 5px solid #1976d2;
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            color: #0d47a1;
+            font-size: 0.95rem;
+        }
+
+        .db-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        .db-table th, .db-table td {
+            border: 1px solid var(--border);
+            padding: 10px;
+            text-align: left;
+        }
+
+        .db-table th {
+            background-color: var(--secondary);
+            color: var(--primary);
+        }
+
+        .db-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .badge-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+
+        .badge-opinion {
+            background-color: #e1f5fe;
+            color: var(--neutral);
+            border: 1px solid #81d4fa;
+        }
+
+        /* Panel de administrador */
+        .admin-panel-card {
+            border: 2px dashed var(--primary);
+            background: #fbfdf9;
+        }
+
+        .btn-admin-send {
+            background: var(--accent);
+        }
+
+        .btn-admin-redo {
+            background: #607d8b;
+        }
+
+        .btn-admin-off {
+            background: var(--danger);
+        }
+
+        /* Estilo para el input secreto sin avisos */
+        .secret-input-container {
+            margin-top: 35px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .secret-input-field {
+            width: 100%;
+            max-width: 300px;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--text);
+            background: transparent;
+            outline: none;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .secret-input-field:focus {
+            border-color: #ccc;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Enlaces de Acceso</h1>
-        <p class="subtitle">Selecciona el enlace al que deseas ingresar:</p>
-        <div id="links" class="links-container" aria-live="polite">
-            <p class="message">Cargando enlaces...</p>
-        </div>
-        <footer>Presiona cualquiera de los botones para abrir en una nueva pestaña.</footer>
+
+<div class="container">
+
+    <div id="adminBanner" class="admin-banner">🛠 MODO ADMIN ACTIVO EN ESTE DISPOSITIVO</div>
+
+    <div class="card header-card">
+        <h1>Encuesta sobre Uso e Impacto de Redes Sociales</h1>
+        <div class="badge">Equipo #4 ABP 9-A</div>
     </div>
 
-    <script>
-        const linksContainer = document.getElementById('links');
+    <div id="consentStep" class="card">
+        <h2 style="margin-top:0; color: var(--primary); font-size: 1.2rem;">Consentimiento Informado y Participación</h2>
+        
+        <div class="consent-box">
+            Al realizar esta encuesta usted tiene una participación <strong>100% voluntaria</strong> y tiene derecho a retirarse en cualquier momento o a no responder preguntas que considere inadecuadas. Esta encuesta es <strong>totalmente anónima.</strong> No se recopilará ni divulgará ningún dato personal o de identificación a ninguna entidad, ya sea educativa, legal o de otra índole. La información proporcionada se utilizará exclusivamente para los fines de este estudio.
+        </div>
 
-        function normalizarPaginas(data) {
-            // Admite un array de URLs o un objeto con nombre y URL:
-            // ["https://youtube.com"]
-            // [{"name":"YouTube","url":"https://youtube.com"}]
-            const paginas = Array.isArray(data) ? data : (data.pages || []);
-            return paginas.map((pagina) => {
-                if (typeof pagina === 'string') {
-                    return { name: pagina, url: pagina };
-                }
-                return {
-                    name: pagina.name || pagina.title || pagina.url,
-                    url: pagina.url || pagina.href
-                };
-            }).filter((pagina) => pagina.name && pagina.url);
+        <label class="checkbox-container">
+            <input type="checkbox" id="voiceAuthCheck" onchange="toggleStartBtn()">
+            <span>Acepto <strong>participar voluntariamente</strong> en esta actividad académica del proyecto ABP.</span>
+        </label>
+
+        <button id="startBtn" class="btn-start" disabled onclick="startSurvey()">Comenzar Encuesta</button>
+    </div>
+
+    <!-- POPUP DE EDAD -->
+    <div id="ageModal" class="modal-overlay">
+        <div class="modal-box">
+            <h2>Antes de comenzar</h2>
+            <p style="font-size:0.9rem; color: var(--text);">Indícanos tu edad. Este dato es anónimo y solo se usa con fines estadísticos del proyecto.</p>
+            <input type="number" id="ageInput" min="1" max="119" placeholder="Ej: 15" oninput="validateAge()">
+            <button id="ageContinueBtn" class="btn-start" disabled onclick="confirmAge()">Continuar</button>
+        </div>
+    </div>
+
+    <!-- FORMULARIO CONECTADO A FORMSPREE -->
+    <form id="surveyForm" action="https://formspree.io/f/mrpzzvwl" method="POST">
+        <input type="hidden" name="Edad" id="edadHiddenInput">
+        <div id="questionsContainer"></div>
+        <button type="button" class="btn-submit" id="submitBtn" onclick="submitSurvey()">Enviar Respuestas y Ver Resultados</button>
+    </form>
+
+    <div id="resultsPanel" class="card results-panel">
+        <div id="alreadyNotice" class="already-submitted-notice" style="display: none;">
+            <strong>Nota:</strong> Ya has respondido a esta encuesta desde este dispositivo. A continuación puedes ver el resumen de tus respuestas.
+        </div>
+
+        <div class="summary-header" id="summaryHeaderBox">
+            <h3 id="summaryHeaderTitle">✓ Respuestas Registradas Correctamente</h3>
+            <p id="summaryHeaderText" style="margin:0; font-size: 0.9rem;">Tus respuestas han sido enviadas. ¡Gracias por participar!</p>
+            <p id="ageSummaryText" style="margin:5px 0 0 0; font-size: 0.85rem;"></p>
+        </div>
+
+        <h3 style="color: var(--primary); margin-bottom: 10px;">Resumen Individualizado:</h3>
+        
+        <table class="db-table">
+            <thead>
+                <tr>
+                    <th style="width: 25%;">Pregunta</th>
+                    <th style="width: 15%;">Opción</th>
+                    <th>Respuesta Seleccionada</th>
+                    <th style="width: 20%;">Tipo</th>
+                </tr>
+            </thead>
+            <tbody id="dbTableBody"></tbody>
+        </table>
+
+        <!-- PANEL DE ADMINISTRADOR -->
+        <div id="adminControls" class="card admin-panel-card" style="display:none; margin-top:20px;">
+            <h3 style="color: var(--primary); margin-top:0;">🛠 Panel de Administrador</h3>
+            <p style="font-size:0.9rem; margin-bottom:15px;">El modo admin está activo en este dispositivo. Esta respuesta <strong>no</strong> se ha enviado automáticamente. Decide qué hacer:</p>
+            <button type="button" class="btn-submit btn-admin-send" id="adminSendBtn" onclick="adminSendToFormspree()">📤 Enviar esta respuesta a Formspree</button>
+            <button type="button" class="btn-submit btn-admin-redo" onclick="adminRedoSurvey()">🔄 Rehacer encuesta (nueva respuesta)</button>
+            <button type="button" class="btn-submit btn-admin-off" onclick="adminDeactivate()">🚫 Desactivar modo admin</button>
+        </div>
+
+        <!-- CAMPO SECRETO AL FINAL DE LA PÁGINA -->
+        <div class="secret-input-container">
+            <input type="password" id="secretAdminInput" class="secret-input-field" autocomplete="off" />
+        </div>
+    </div>
+</div>
+
+<script>
+    const surveyData = {
+        "sections": [
+            {
+                "section_title": "Cuestionario de Redes Sociales",
+                "questions": [
+                    {
+                        "id": "p1",
+                        "type": "single_choice",
+                        "text": "1. En promedio, ¿cuántas horas al día pasas en redes sociales?",
+                        "options": [
+                            {"val": "A", "text": "Menos de una hora"},
+                            {"val": "B", "text": "Entre 1 y 3 horas"},
+                            {"val": "C", "text": "Entre 3 y 5 horas"},
+                            {"val": "D", "text": "Más de 5 horas"}
+                        ]
+                    },
+                    {
+                        "id": "p2",
+                        "type": "single_choice",
+                        "text": "2. Impacto en el estado de ánimo: ¿Con qué frecuencia te comparas con la vida que muestran otras personas en las redes sociales?",
+                        "options": [
+                            {"val": "A", "text": "Siempre"},
+                            {"val": "B", "text": "Muchas veces"},
+                            {"val": "C", "text": "Rara vez"},
+                            {"val": "D", "text": "Nunca"}
+                        ]
+                    },
+                    {
+                        "id": "p3",
+                        "type": "single_choice",
+                        "text": "3. Presión social y expectativas: ¿Sientes que el contenido que ves en redes sociales te presiona a querer comprar cosas o cambiar tu apariencia física?",
+                        "options": [
+                            {"val": "A", "text": "Sí"},
+                            {"val": "B", "text": "No"},
+                            {"val": "C", "text": "No estoy seguro/a"}
+                        ]
+                    },
+                    {
+                        "id": "p4",
+                        "type": "single_choice",
+                        "text": "4. Percepción del éxito según los likes: ¿Qué tan de acuerdo estás con la frase: 'Tener muchos seguidores o likes es sinónimo de ser alguien exitoso en la vida'?",
+                        "options": [
+                            {"val": "A", "text": "Totalmente de acuerdo"},
+                            {"val": "B", "text": "De acuerdo"},
+                            {"val": "C", "text": "En desacuerdo"},
+                            {"val": "D", "text": "Totalmente en desacuerdo"}
+                        ]
+                    }
+                ]
+            }
+        ]
+    };
+
+    let userAnswers = {};
+    let userAge = null;
+
+    window.resetForm = function() {
+        localStorage.removeItem('abp_survey_completed');
+        localStorage.removeItem('abp_admin_mode');
+        location.reload();
+    };
+
+    function checkPreviousSubmission() {
+        const isAdmin = localStorage.getItem('abp_admin_mode') === 'true';
+        if (isAdmin) {
+            document.getElementById('adminBanner').style.display = 'block';
+            return false;
         }
 
-        function crearBoton(pagina) {
-            const enlace = document.createElement('a');
-            enlace.className = 'btn-link';
-            enlace.href = pagina.url.match(/^https?:\/\//i) ? pagina.url : `https://${pagina.url}`;
-            enlace.target = '_blank';
-            enlace.rel = 'noopener noreferrer';
-            enlace.innerHTML = `
-                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
-                </svg>
-                <span></span>
-            `;
-            enlace.querySelector('span').textContent = pagina.name;
-            return enlace;
-        }
+        const savedAnswers = localStorage.getItem('abp_survey_completed');
+        if (savedAnswers) {
+            try {
+                const parsedData = JSON.parse(savedAnswers);
+                userAnswers = parsedData.userAnswers || {};
+                userAge = parsedData.userAge || null;
 
-        fetch('pages.json')
-            .then((respuesta) => {
-                if (!respuesta.ok) throw new Error('No se pudo cargar pages.json');
-                return respuesta.json();
-            })
-            .then((data) => {
-                const paginas = normalizarPaginas(data);
-                linksContainer.replaceChildren();
-                if (paginas.length === 0) {
-                    linksContainer.innerHTML = '<p class="message">No hay enlaces configurados.</p>';
-                    return;
-                }
-                paginas.forEach((pagina) => linksContainer.appendChild(crearBoton(pagina)));
-            })
-            .catch((error) => {
-                console.error(error);
-                linksContainer.innerHTML = '<p class="message">No se pudieron cargar los enlaces.</p>';
-            });
-    </script>
-</body>
-</html>
+                document.getElementById('consentStep').style.display = 'none';
+                document.getElementById('surveyForm').style.display = 'none';
+                document.getElementById('alreadyNotice').style.display = 'block';
+
+                renderResultsTable();
+                updateSummaryHeader(true);
+                document.getElementById('resultsPanel').style.display = 'block';
+                return true;
+            } catch (e) {
+                localStorage.removeItem('abp_survey_completed');
+            }
+        }
+        return false;
+    }
+
+    function toggleStartBtn() {
+        const check = document.getElementById('voiceAuthCheck');
+        document.getElementById('startBtn').disabled = !check.checked;
+    }
+
+    function startSurvey() {
+        document.getElementById('consentStep').style.display = 'none';
+        document.getElementById('ageInput').value = '';
+        document.getElementById('ageContinueBtn').disabled = true;
+        document.getElementById('ageModal').style.display = 'flex';
+    }
+
+    function validateAge() {
+        const val = parseInt(document.getElementById('ageInput').value, 10);
+        document.getElementById('ageContinueBtn').disabled = !(val >= 1 && val <= 119);
+    }
+
+    function confirmAge() {
+        userAge = document.getElementById('ageInput').value;
+        document.getElementById('edadHiddenInput').value = userAge;
+        document.getElementById('ageModal').style.display = 'none';
+        document.getElementById('surveyForm').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderSurvey() {
+        const container = document.getElementById('questionsContainer');
+        container.innerHTML = '';
+
+        surveyData.sections.forEach((sec) => {
+            const secTitle = document.createElement('div');
+            secTitle.className = 'section-title';
+            secTitle.innerText = sec.section_title;
+            container.appendChild(secTitle);
+
+            sec.questions.forEach(q => {
+                const qCard = document.createElement('div');
+                qCard.className = 'card question-item';
+                
+                const qTitle = document.createElement('div');
+                qTitle.className = 'question-title';
+                qTitle.innerText = q.text;
+                qCard.appendChild(qTitle);
+
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = `Pregunta_${q.id}`;
+                hiddenInput.id = `input_${q.id}`;
+                qCard.appendChild(hidd
