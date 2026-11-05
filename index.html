@@ -9,75 +9,53 @@
 *{box-sizing:border-box;margin:0}
 html,body{min-height:100%;background:#120c07;color:#f4e8cb;font-family:Georgia,serif}
 body{display:grid;place-items:center;min-height:100vh;padding:24px}
-main{width:min(100%,960px);text-align:center}
-h1{font-size:clamp(2rem,7vw,5.5rem);line-height:1.16;padding:.2em .12em .3em;overflow:visible;text-wrap:balance;color:#f4e8cb;text-shadow:4px 5px 0 #5d3925}
+main{width:min(100%,1000px);text-align:center}
+h1{font-size:clamp(2rem,7vw,5.5rem);line-height:1.2;padding:.22em .16em .32em;overflow:visible;text-wrap:balance;color:#f4e8cb;text-shadow:4px 5px 0 #5d3925}
 p{margin:24px auto;max-width:680px;font:clamp(1rem,2.4vw,1.35rem)/1.6 sans-serif;color:#e5cfad}
 #status{font:1rem/1.5 sans-serif;color:#e5cfad}
-#start{display:none;margin:24px auto 0;padding:14px 22px;border:0;background:#f4e8cb;color:#2b1a0d;font-size:1.1rem;font-weight:bold;cursor:pointer}
-#start:disabled{opacity:.6;cursor:wait}
 #progress{width:min(100%,420px);height:8px;margin:16px auto;background:#39291d;border-radius:8px;overflow:hidden}
-#bar{height:100%;width:0;background:#e9b86a;transition:width .2s}
-#errors{display:none;margin-top:12px;color:#ffd2a8;font: .9rem/1.5 sans-serif}
+#bar{height:100%;width:18%;background:#e9b86a;animation:wait 1.2s ease-in-out infinite alternate}
+@keyframes wait{to{width:88%}}
+#error{display:none;margin-top:16px;color:#ffd2a8;font:1rem/1.5 sans-serif;overflow-wrap:anywhere}
 </style>
 </head>
 <body>
 <main>
 <h1>Medellín: ¿quién cuenta esta historia?</h1>
-<p>Una historia de memoria, violencia y de las personas que siguen construyendo ciudad.</p>
-<div id="status" role="status" aria-live="polite">Preparando la experiencia…</div>
+<p>Estamos preparando las letras y los recursos de la historia. La experiencia comenzará cuando estén listos.</p>
+<div id="status" role="status" aria-live="polite">Cargando la experiencia…</div>
 <div id="progress" aria-hidden="true"><div id="bar"></div></div>
-<button id="start" type="button">Empezar</button>
-<div id="errors"></div>
+<div id="error"></div>
 </main>
 <script>
 'use strict';
-const files=['assets1.zip','assets2.zip','assets3.zip'];
-const status=document.querySelector('#status');
-const bar=document.querySelector('#bar');
-const start=document.querySelector('#start');
-const errors=document.querySelector('#errors');
-
-// Keep the start screen in place until the complete asset bundles have arrived.
-// Fetching them in parallel reduces the wait while still reporting progress.
-async function preload(){
-  let done=0;
-  const results=await Promise.all(files.map(async file=>{
-    try{
-      const response=await fetch(file);
-      if(!response.ok) throw new Error(`${file}: HTTP ${response.status}`);
-      const blob=await response.blob();
-      done++;
-      bar.style.width=`${Math.round(done/files.length*100)}%`;
-      status.textContent=`Recursos cargados: ${done} de ${files.length}…`;
-      return {file,ok:true,blob};
-    }catch(error){
-      done++;
-      bar.style.width=`${Math.round(done/files.length*100)}%`;
-      return {file,ok:false,error};
-    }
-  }));
-  const failed=results.filter(item=>!item.ok);
-  if(failed.length){
-    errors.style.display='block';
-    errors.textContent='No se pudieron cargar algunos archivos. Comprueba que assets1.zip, assets2.zip y assets3.zip estén publicados junto a index.html y vuelve a cargar la página.';
-    status.textContent='No se pudieron cargar todos los recursos.';
-    start.textContent='Reintentar';
-    start.style.display='inline-block';
-    start.disabled=false;
-    start.onclick=()=>location.reload();
-    return;
+(async()=>{
+  const status=document.querySelector('#status');
+  const error=document.querySelector('#error');
+  // Load the original experience source, then gate its start until its ZIP assets
+  // and letter images have been fetched and decoded by the original loader below.
+  const sourceUrl='https://raw.githubusercontent.com/callspencer/abp/1b947cd9cc2a1d4ce96b8a4efcc4e0ea3e52b530/index.html';
+  try{
+    const response=await fetch(sourceUrl,{cache:'force-cache'});
+    if(!response.ok) throw new Error(`HTTP ${response.status}`);
+    let html=await response.text();
+    const titleLine="$('#intro').append(R(0,0,'Medellín ¿quién cuenta esta historia?',230,150,-1).f());";
+    if(!html.includes(titleLine)) throw new Error('No se encontró el título de la experiencia original.');
+    html=html.replace(titleLine,"$('#intro').insertAdjacentHTML('beforeend','<h1 id=boot-title style=\"position:absolute;left:160px;top:230px;width:1600px;padding:24px 20px;overflow:visible;text-align:center;color:#f4e8cb;font:900 78px/1.25 Georgia,serif;text-shadow:5px 6px #5d3925\">Medellín: ¿quién cuenta esta historia?</h1>');");
+    const readyLine="note.textContent=ok?'clic o espacio para empezar':'clic para empezar (usando carpeta assets/)';ready=1";
+    if(!html.includes(readyLine)) throw new Error('No se encontró el cargador de recursos original.');
+    const waitForImages=`if(ok!==ZIPS.length){note.textContent='No se pudieron cargar todos los paquetes de recursos. Recarga la página para intentarlo de nuevo.';return;}\n  const images=Object.entries(BL).filter(([name])=>/\\.(png|jpe?g)$/i.test(name));let loaded=0;\n  const imageResults=await Promise.all(images.map(([name,url])=>new Promise(resolve=>{const img=new Image();img.onload=()=>resolve(true);img.onerror=()=>resolve(false);img.src=url;if(img.complete&&img.naturalWidth)resolve(true)})));\n  const failed=imageResults.filter(ok=>!ok).length;if(failed){note.textContent='No se pudieron preparar '+failed+' imágenes. Recarga la página para intentarlo de nuevo.';return;}\n  document.querySelector('#boot-title')?.remove();$('#intro').append(R(0,0,'Medellín ¿quién cuenta esta historia?',230,150,-1).f());\n  note.textContent='Todos los recursos están listos. Clic o espacio para empezar.';ready=1`;
+    html=html.replace(readyLine,waitForImages);
+    status.textContent='Recursos listos; abriendo la experiencia…';
+    document.open();
+    document.write(html);
+    document.close();
+  }catch(err){
+    status.textContent='No se pudo preparar la experiencia.';
+    error.style.display='block';
+    error.textContent='Comprueba tu conexión e inténtalo de nuevo. Detalle: '+err.message;
   }
-  // Retain downloaded bundles in the browser cache for the subsequent experience.
-  status.textContent='Todos los recursos están cargados. Ya puedes empezar.';
-  start.style.display='inline-block';
-  start.disabled=false;
-  start.onclick=()=>{
-    status.textContent='¡Listo!';
-    start.disabled=true;
-  };
-}
-start.disabled=true;
-preload();
+})();
 </script>
 </body>
 </html>
