@@ -176,8 +176,6 @@ let mt;onmousemove=()=>{document.body.classList.add('mv');clearTimeout(mt);mt=se
  $('#fr').style.clipPath='path(evenodd,"M0 0H1920V1080H0Z M'+q.map(a=>a.join(' ')).join('L')+'Z")';
  const j=[];for(let y=0;y<=1080;y+=60)j.push((97+rd()*3)+'% '+y/10.8+'%');$('#wp').style.clipPath='polygon(0 0,'+j.join(',')+',0 100%)'})();
 dio();
-$('#pz').append(R(0,0,'pausa',420,170).f());
-$('#intro').append(R(0,0,'Medellín ¿quién cuenta esta historia?',230,150,-1).f());
 $('#intro').insertAdjacentHTML('beforeend','<div class=pc style="left:560px;top:850px;transform:rotate(-2deg);--d:0s"><div class=tg style="max-width:800px;text-align:center"><span id=ld>cargando…</span><br><small style="font-size:22px">espacio/clic: pausa · ← →: ±5 s · AvPág/RePág: escena · F: pantalla completa</small></div></div>');
 tick();
 (async()=>{const note=$('#ld');let ok=0;
@@ -187,5 +185,7 @@ tick();
   for(const n of Object.keys(zp.files)){const f=zp.files[n];if(f.dir)continue;
    BL[n]=URL.createObjectURL(new Blob([await f.async('arraybuffer')],{type:MT[n.split('.').pop()]||''}))}
   ok++}catch(e){}}
+ $('#pz').append(R(0,0,'pausa',420,170).f());
+ $('#intro').append(R(0,0,'Medellín ¿quién cuenta esta historia?',230,150,-1).f());
  note.textContent=ok?'clic o espacio para empezar':'clic para empezar (usando carpeta assets/)';ready=1})();
 </script></body></html>
