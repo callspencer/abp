@@ -199,8 +199,8 @@ function load(i){act0();si=i;
  if(i>=SC.length){sc=null;m.pause();st.className='a j';dio('j');L.append(R(0,0,'Continuará',380,200).f());return}
  sc=SC[i];sc.cu=[];st.className=(sc.v?'v':'a '+sc.mood);if(!sc.v)dio(sc.mood);m.src=U(sc.src);
  m.onloadedmetadata=()=>{D.style.setProperty('--dur',m.duration+'s');const k=m.duration/sc.d;sc.cu=sc.c.map(c=>c.raw?c:{...c,a:c.a*k,b:c.b*k})};m.play().catch(()=>{})}
-function go(i){if(!started)return;i=Math.max(0,Math.min(SC.length,i));const w=$('#wp');w.classList.remove('go');void w.offsetWidth;w.classList.add('go');setTimeout(()=>load(i),480)}
-m.onended=()=>go(si+1);
+function go(i){if(!started)return;i=Math.max(0,Math.min(SC.length-1,i));const w=$('#wp');w.classList.remove('go');void w.offsetWidth;w.classList.add('go');setTimeout(()=>load(i),480)}
+m.onended=()=>{if(si<SC.length-1)go(si+1)};
 m.onpause=()=>{if(sc&&!m.ended){st.classList.add('ps');$('#pz').style.display='block'}};
 m.onplay=()=>{st.classList.remove('ps');$('#pz').style.display='none'};
 function tick(){if(sc){const t=m.currentTime;for(const c of sc.cu){const on=t>=c.a&&t<c.b,e=act.get(c);
