@@ -1,191 +1,83 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><title>Medellín: ¿quién cuenta esta historia?</title>
+<html lang="es">
+<head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#120c07">
+<title>Medellín: ¿quién cuenta esta historia?</title>
 <style>
 *{box-sizing:border-box;margin:0}
-html,body{height:100%;background:#120c07;overflow:hidden;cursor:none}
-body.mv{cursor:default}
-#st{position:absolute;left:50%;top:50%;width:1920px;height:1080px;background:#b88a5a;overflow:hidden;user-select:none;font-family:"Segoe Print","Bradley Hand","Marker Felt","Comic Sans MS",cursive}
-#st *{pointer-events:none}
-#st.s{--h1:#4a3a48;--h2:#5d4350;--h3:#3a2c33;--sun:#e9dcc0;--s1:#2a2842;--s2:#8a5560}
-#st.j{--h1:#a98053;--h2:#8f6a3f;--h3:#6d4a2c;--sun:#fff0c4;--s1:#f4cf86;--s2:#eaa65e}
-#dio{position:absolute;inset:0;z-index:1;background:linear-gradient(var(--s1),var(--s2))}
-#st.v #dio{display:none}
-#m{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;filter:contrast(1.06) saturate(.9) sepia(.15)}
-#st.a #m{visibility:hidden}
-#L{position:absolute;inset:0;z-index:5}
-.sun{position:absolute;left:1420px;top:90px;width:210px;height:210px;border-radius:50%;background:var(--sun);box-shadow:6px 8px 0 rgba(0,0,0,.25);animation:jt .7s steps(1) infinite}
-.cl{position:absolute;height:70px;border-radius:50%;background:#f3e8d0;opacity:.85;box-shadow:5px 6px 0 rgba(0,0,0,.18);animation:cl 90s steps(180) infinite alternate}
-@keyframes cl{to{translate:700px 0}}
-.hl{position:absolute;left:0;width:1920px}
-.h1{top:480px;height:600px;background:var(--h1);clip-path:polygon(0 40%,15% 22%,30% 35%,50% 10%,70% 30%,88% 15%,100% 28%,100% 100%,0 100%)}
-.h2{top:640px;height:440px;background:var(--h2);clip-path:polygon(0 30%,20% 12%,40% 28%,65% 8%,85% 25%,100% 10%,100% 100%,0 100%)}
-.h3{top:850px;height:230px;background:var(--h3);clip-path:polygon(0 20%,30% 8%,55% 25%,80% 5%,100% 20%,100% 100%,0 100%)}
-.cb{position:absolute;left:0;top:318px;width:2050px;height:4px;background:#2b1b0e;transform-origin:0 0;rotate:7deg}
-.cab{position:absolute;width:76px;height:56px;background:#c8463a;box-shadow:4px 5px 0 rgba(0,0,0,.35);animation:cab 40s steps(160) infinite;clip-path:polygon(0 0,100% 0,100% 85%,90% 100%,10% 100%,0 85%)}
-@keyframes cab{from{left:-80px;top:322px}to{left:1920px;top:560px}}
-.hs{position:absolute;box-shadow:4px 5px 0 rgba(0,0,0,.35);animation:pop .4s steps(4) both}
-.ro{position:absolute;left:-6%;top:-32%;width:112%;height:34%;background:#7a2f22;clip-path:polygon(0 100%,50% 0,100% 100%)}
-.wi{position:absolute;left:30%;top:30%;width:22%;height:28%;background:#ffe08a}
-.pc{position:absolute;filter:drop-shadow(7px 9px 0 rgba(35,18,4,.4))}
-.pc>*{animation:jt .6s steps(1) infinite;animation-delay:var(--d)}
-.pc.rs{display:flex;justify-content:center}
-.pc img{display:block}
-.ph{border:14px solid #f6efe0}
-.rb{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;max-width:1500px;row-gap:6px}
-.wd{display:flex;align-items:center}
-.lt{position:relative;display:inline-block;line-height:0}
-.ac{position:absolute;top:-14%;left:55%;font:900 30px Georgia,serif;font-style:normal;background:#f4e8cb;line-height:1;padding:0 4px;color:#111}
-.tl{display:inline-flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:900;padding:0 .2em;margin:0 3px;clip-path:polygon(0 4%,50% 0,100% 5%,98% 100%,48% 96%,2% 100%)}
-.tg{position:relative;width:max-content;max-width:520px;padding:18px 26px;background:#f4e8cb;color:#2b1a0d;font-size:32px;font-weight:700;line-height:1.2;clip-path:polygon(0 3%,4% 0,30% 2%,60% 0,100% 3%,99% 40%,100% 97%,70% 100%,35% 98%,2% 100%,0 60%)}
-.tg:before{content:"";position:absolute;left:38%;top:0;width:90px;height:22px;background:rgba(255,226,120,.8);rotate:-3deg}
-@keyframes jt{0%{translate:0 0;rotate:0deg}34%{translate:2px -3px;rotate:.8deg}67%{translate:-3px 2px;rotate:-.7deg}}
-@keyframes pop{from{scale:.3;opacity:0}to{scale:1;opacity:1}}
-@keyframes up{from{translate:0 320px;opacity:0}to{translate:0 0;opacity:1}}
-@keyframes drop{from{translate:0 -320px;opacity:0}to{translate:0 0;opacity:1}}
-@keyframes left{from{translate:-520px 0;opacity:0}to{translate:0 0;opacity:1}}
-@keyframes right{from{translate:520px 0;opacity:0}to{translate:0 0;opacity:1}}
-@keyframes bye{to{scale:.7;opacity:0;translate:0 20px}}
-.pop{animation:pop .5s steps(5) both}.up{animation:up .7s steps(6) both}.drop{animation:drop .6s steps(6) both}.left{animation:left .7s steps(6) both}.right{animation:right .7s steps(6) both}
-.pc.out{animation:bye .35s steps(3) forwards}
-.ps *,.ps:before{animation-play-state:paused!important}
-#frw{position:absolute;inset:0;z-index:10;filter:drop-shadow(0 0 10px rgba(0,0,0,.55))}
-#fr{position:absolute;inset:0;background:linear-gradient(135deg,#dcc59c,#bf9d6c)}
-#gr{position:absolute;inset:-40px;z-index:11;opacity:.3;mix-blend-mode:multiply;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:gr .5s steps(1) infinite}
-@keyframes gr{33%{translate:-20px 12px}66%{translate:14px -18px}}
-#wp{position:absolute;inset:0;z-index:30;background:#8a5f3a;translate:-120% 0}
-#wp.go{animation:wp 1s steps(10) forwards}
-@keyframes wp{0%{translate:-120% 0}45%{translate:0 0}55%{translate:0 0}100%{translate:120% 0}}
-#pz{position:absolute;inset:0;z-index:25;display:none;background:rgba(20,10,0,.35)}
-#hud{position:absolute;left:0;right:0;bottom:0;height:12px;z-index:20;opacity:0;transition:opacity .3s}
-body.mv #hud{opacity:1}
-#bar{height:100%;width:0;background:#f4e8cb;box-shadow:0 0 6px #000}
-#intro{position:absolute;inset:0;z-index:40;background:#b88a5a}
-</style></head><body>
-<div id="st" class="j">
-<div id="dio"></div><video id="m" playsinline preload="auto"></video><div id="L"></div>
-<div id="frw"><div id="fr"></div></div><div id="gr"></div>
-<div id="pz"></div><div id="hud"><div id="bar"></div></div><div id="wp"></div>
-<div id="intro"></div>
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+html,body{min-height:100%;background:#120c07;color:#f4e8cb;font-family:Georgia,serif}
+body{display:grid;place-items:center;min-height:100vh;padding:24px}
+main{width:min(100%,960px);text-align:center}
+h1{font-size:clamp(2rem,7vw,5.5rem);line-height:1.16;padding:.2em .12em .3em;overflow:visible;text-wrap:balance;color:#f4e8cb;text-shadow:4px 5px 0 #5d3925}
+p{margin:24px auto;max-width:680px;font:clamp(1rem,2.4vw,1.35rem)/1.6 sans-serif;color:#e5cfad}
+#status{font:1rem/1.5 sans-serif;color:#e5cfad}
+#start{display:none;margin:24px auto 0;padding:14px 22px;border:0;background:#f4e8cb;color:#2b1a0d;font-size:1.1rem;font-weight:bold;cursor:pointer}
+#start:disabled{opacity:.6;cursor:wait}
+#progress{width:min(100%,420px);height:8px;margin:16px auto;background:#39291d;border-radius:8px;overflow:hidden}
+#bar{height:100%;width:0;background:#e9b86a;transition:width .2s}
+#errors{display:none;margin-top:12px;color:#ffd2a8;font: .9rem/1.5 sans-serif}
+</style>
+</head>
+<body>
+<main>
+<h1>Medellín: ¿quién cuenta esta historia?</h1>
+<p>Una historia de memoria, violencia y de las personas que siguen construyendo ciudad.</p>
+<div id="status" role="status" aria-live="polite">Preparando la experiencia…</div>
+<div id="progress" aria-hidden="true"><div id="bar"></div></div>
+<button id="start" type="button">Empezar</button>
+<div id="errors"></div>
+</main>
 <script>
-const ZIPS=['assets1.zip','assets2.zip','assets3.zip'],BL={};
-const U=p=>BL[p]||'assets/'+p;
-const MT={mp4:'video/mp4',mp3:'audio/mpeg',png:'image/png',jpg:'image/jpeg'};
-const LET={"a": ["a_1", "a_2", "a_3", "a_4"], "b": ["b_1", "b_2", "b_3", "b_4"], "c": ["c_1", "c_2", "c_3", "c_4"], "d": ["d_1", "d_2", "d_3", "d_4"], "e": ["e_1", "e_2", "e_3", "e_4"], "f": ["f_1", "f_2", "f_3", "f_4"], "g": ["g_1", "g_2", "g_3", "g_4"], "h": ["h_1", "h_2", "h_3", "h_4"], "i": ["i_1", "i_2", "i_3", "i_4"], "j": ["j_1", "j_2", "j_3", "j_4"], "k": ["k_1", "k_2", "k_3", "k_4"], "l": ["l_1", "l_2", "l_3", "l_4"], "m": ["m_1", "m_2", "m_3"], "n": ["n_1", "n_2", "n_3", "n_4"], "o": ["o_1", "o_2", "o_3", "o_4"], "p": ["p_1", "p_2", "p_3", "p_4"], "q": ["q_1", "q_2", "q_3", "q_4"], "r": ["r_1", "r_2", "r_3", "r_4"], "s": ["s_1", "s_2", "s_3", "s_4"], "t": ["t_1", "t_2", "t_3", "t_4"], "u": ["u_1", "u_2", "u_3", "u_4"], "v": ["v_1", "v_2", "v_3", "v_4"], "w": ["w_1", "w_2", "w_3"], "x": ["x1", "x2"], "y": ["y1", "y2"], "z": ["z_1", "z_2", "z_3"]};
-const $=s=>document.querySelector(s),st=$('#st'),m=$('#m'),L=$('#L'),D=$('#dio');
-let S=7;const rd=()=>(S=S*16807%2147483647)/2147483647;
-const PAL=[['#f4e8cb','#2b1a0d'],['#d96b4a','#fff'],['#2f5d8a','#fff'],['#f0c24b','#222'],['#e8e1d0','#8a1f1f'],['#222','#f4e8cb']];
-const AC={'\u0301':'´','\u0303':'~','\u0308':'¨'};
-function pc(x,y,r,an,cls=''){const d=document.createElement('div');d.className='pc '+an+' '+cls;d.style.cssText=`left:${x}px;top:${y}px;transform:rotate(${r}deg);--d:-${rd()*.6}s`;return d}
-const I=(a,b,s,x,y,w,r=0,an='pop')=>({a,b,f:()=>{const d=pc(x,y,r,an),i=new Image();i.src=U(s);i.style.width=w+'px';if(/jpg$/.test(s))i.className='ph';d.append(i);return d}});
-const T=(a,b,t,x,y,r=0,an='pop')=>({a,b,f:()=>{const d=pc(x,y,r,an);d.innerHTML=`<div class=tg>${t}</div>`;return d}});
-function R(a,b,t,y,h,r=0,an='pop',x=null,wm=1500){return{a,b,f:()=>{
- const d=pc(x??0,y,r,an,'rs'),bx=document.createElement('div');bx.className='rb';d.style.width=(x==null?1920:wm)+'px';bx.style.maxWidth=(x==null?1500:wm)+'px';
- for(const w of t.split(' ')){const wd=document.createElement('div');wd.className='wd';wd.style.margin=`0 ${h*.16}px`;
-  for(const ch of w){const n=ch.toLowerCase().normalize('NFD'),v=LET[n[0]];
-   if(v){const i=new Image(),s=document.createElement('span');i.src=U('l/'+v[(rd()*v.length)|0]+'.png');
-    i.style.cssText=`height:${h*(.82+rd()*.3)}px;margin:${(rd()-.5)*h*.2}px -2px 0;rotate:${(rd()-.5)*10}deg`;s.className='lt';s.append(i);
-    if(AC[n[1]]){const q=document.createElement('i');q.className='ac';q.textContent=AC[n[1]];s.append(q)}wd.append(s)}
-   else{const p=PAL[(rd()*PAL.length)|0],s=document.createElement('span');s.className='tl';s.textContent=ch;s.style.cssText=`height:${h*.95}px;font-size:${h*.7}px;background:${p[0]};color:${p[1]};rotate:${(rd()-.5)*8}deg`;wd.append(s)}}
-  bx.append(wd)}
- d.append(bx);return d}}}
-const B=(a,b,x,y,w,dm)=>({a,b,f:()=>{const d=pc(x,y,0,'up');d.innerHTML=`<svg width=${w} viewBox="0 0 200 160"><path d="M10 120 L70 60 L60 20 L110 55 L190 40 L130 95 L150 140 L70 120 Z" fill="${dm?'#8a8f96':'#f6f0de'}" stroke="#fff" stroke-width="6" stroke-linejoin="round"/>${dm?'<path d="M60 20 L90 70 M120 60 L110 110 M40 100 L80 95" stroke="#222" stroke-width="4" fill="none"/>':''}</svg>`;return d}});
-const HS=(a,x,y,dk)=>({a,b:1e9,raw:1,to:1,f:()=>{const d=document.createElement('div'),w=44+(y-600)/330*70,c=(dk?['#4b3a48','#5a4254','#3b3341']:['#c98d4e','#b5683d','#d9b06a','#a3a077','#8f7a5a'])[(rd()*(dk?3:5))|0];
- d.className='hs';d.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${w*.8}px;background:${c};z-index:${y|0}`;d.innerHTML='<i class=ro></i><b class=wi></b>';return d}});
-const hs=(n,dk)=>Array.from({length:n},(_,i)=>HS(dk?0:3+i*3.7,60+rd()*1700,600+rd()*330,dk));
-const P='metrocable_ilustracion.png';
-const SC=[
-{n:'Y',v:1,src:'y.mp4',d:111,c:[
-T(0,5,'Y · El presente que esconde el pasado',70,930,-2),
-R(.5,10,'Medellín hoy',40,120,-2),
-I(1,10,'metrocable_montjuic_BARCELONA.png',1500,250,300,4,'right'),I(2,10,'caracas_ilustracion_VENEZUELA.png',70,300,430,-4,'left'),
-T(11,20,'el presente convive con algo que ocurrió hace décadas',70,300,-3),
-R(20,30,'Parque San Antonio',40,100),T(23,31,'dos esculturas, una historia distinta',1450,320,3),
-R(31,41,'1995',300,130,-5,'drop',70,480),T(33,41,'una bomba · una réplica donada por Botero',1430,330,2),
-T(41,50,'una huella de la violencia en medio de la normalidad',1430,330,-2),
-R(50,60,'¿Qué tiene que pasar?',40,105),
-R(60,70,'Violencia',300,110,-4,'left',70,480),R(62,70,'Innovación',300,70,4,'right',1300,560),
-R(70,80,'¿Dos ciudades?',40,115),R(80,90,'Ambas están aquí',40,105),R(90,100,'Retroceder',40,115),
-I(92,111,'panoramaMedellin1.jpg',60,300,520,-3,'left'),I(95,111,'PanoramaMedellin2.jpg',1420,300,400,3,'right'),
-T(100,111,'y más adelante volveremos a este parque',60,660,-2)]},
-{n:'P',v:1,src:'p.mp4',d:66,c:[
-T(0,5,'P · Una ciudad que siempre ha estado cambiando',70,930,-2),
-R(.5,10,'Siempre cambiando',40,110),I(2,10,'panoramaMedellin1.jpg',60,300,520,-3,'left'),
-T(10,21,'comunidades indígenas · colonización española',1430,330,3),
-R(21,30,'Minería café textil',40,100),R(30,40,'La ladera',40,115),
-T(31,40,'familias · pocas oportunidades · servicios limitados',70,300,-3),
-R(40,51,'1991',300,150,-4,'drop',70,520),T(42,51,'381 muertes por cada 100.000 habitantes',1430,330,3),
-R(51,66,'Siempre el mismo punto de vista',40,95),I(53,66,'cara_tapada.png',1500,260,340,5,'up')]},
-{n:'S',v:0,mood:'s',src:'s.mp3',d:113,c:[...hs(16,1),
-T(0,5,'S · ¿Quién se quedó con la historia?',70,60,-2),
-R(.5,9,'Escobar',400,220,-3,'drop'),R(4,19,'¿Y las víctimas?',640,130,3),
-I(9,19,'manos_alzadas.png',120,230,330,-5,'up'),I(10,19,'cara_tapada.png',1470,260,380,6,'up'),
-R(19,36,'Escobar',140,90,-6,'pop',80,700),R(23,36,'Escobar',330,90,4,'pop',1100,700),R(27,36,'Escobar',520,90,-3,'pop',300,700),
-T(30,36,'las víctimas: una cifra en pantalla',760,800,-2),
-R(36,52,'1993',200,160,-3),T(38,52,'su muerte no fue el final de la violencia',700,620,2),
-I(40,52,'soldados_en_el_barrio.png',1380,160,300,5,'right'),I(44,52,'fusiles_alzados_LA_HABANA.png',90,520,470,-4,'left'),
-R(52,74,'Dos miradas',40,100),I(53,74,P,200,190,420,-3,'left'),I(54,74,'silla_con_sombra.png',1250,190,400,3,'right'),
-T(55,74,'una estación nueva: un cambio real',160,700,-3),T(57,74,'el recuerdo de alguien que nunca regresó',1230,740,2),
-R(74,89,'No desaparece',40,100),B(74,89,540,300,360,1),B(75,89,1020,300,360,0),T(76,89,'Parque San Antonio: la escultura dañada junto a la réplica',640,760,-1),
-R(89,113,'¿Desde dónde contamos la ciudad?',40,95),I(92,113,'nina_tras_el_vidrio.png',160,260,300,-4,'up'),I(95,113,'sello_orquidea_colombia.png',1450,240,280,4,'up'),
-T(98,113,'quiénes hicieron posible el cambio',700,800,2)]},
-{n:'J',v:0,mood:'j',src:'j.mp3',d:180,c:[...hs(40,0),
-T(0,5,'J · Las personas que no dejaron de construir',70,60,-2),
-R(.5,15,'Las personas que no dejaron de construir',150,100,-1),
-R(15,30,'Octubre 2002',60,120),I(15,30,'soldados_en_el_barrio.png',130,230,300,-4,'left'),T(18,30,'Operación Orión · versiones oficiales y testimonios de víctimas',1180,300,3),
-R(30,46,'Memoria',60,120),I(30,46,'manos_alzadas.png',1400,230,320,5,'up'),T(32,46,'las personas desaparecidas · investigación y respeto',160,300,-3),
-R(46,63,'No solo violencia',60,110),T(47,63,'sus habitantes no son solo víctimas ni solo cifras',160,320,-3),I(48,63,'silueta_de_letras.png',1450,200,260,4,'up'),
-R(63,81,'Hip hop',60,120),I(63,81,'puños_protesta.png',150,260,520,-4,'left'),T(66,81,'letras · talleres · actividades',1250,330,3),
-R(81,99,'Grafiti',60,120),I(81,99,'flores_en_la_bandera.png',1350,230,480,3,'right'),T(84,99,'intervenir el espacio público · memoria visible',150,300,-3),
-R(99,117,'Kolacho',60,120),T(100,117,'Héctor Pacheco, rapero asesinado en 2009',150,300,-3),T(104,117,'Jeison Castaño, Jeihhco',1250,420,3),
-R(117,134,'Casa Kolacho',60,120),T(119,134,'abre en diciembre de 2013: hip hop, grafiti y memoria comunitaria',1200,330,3),
-R(134,150,'Personas que organizan',60,105),T(136,150,'enseñan · acompañan · mantienen abiertos los espacios',160,330,-3),I(137,150,'silueta_de_letras.png',1450,230,260,4,'up'),
-R(150,166,'El arte no lo arregla todo',60,100),T(152,166,'la violencia, la desigualdad y las dificultades económicas siguen ahí',160,330,-3),I(153,166,'cara_tapada.png',1450,240,330,5,'up'),
-R(166,180,'Dos dimensiones',60,110),T(167,180,'el pasado que se recuerda',200,330,-3),T(169,180,'el trabajo cotidiano de quienes cambian su vida',1200,330,3),
-I(171,180,P,780,470,330,2,'up'),T(173,180,'… y esa idea nos lleva a otro lugar de Medellín',560,860,-1)]}
-];
-let ready=0,si=-1,sc=null,act=new Map(),started=false;
-const act0=()=>{act.forEach(e=>e.remove());act.clear();L.innerHTML=''};
-function dio(){D.innerHTML='<div class=sun></div><i class=cl style="left:200px;top:140px;width:300px"></i><i class=cl style="left:900px;top:80px;width:380px"></i><i class=cl style="left:1300px;top:260px;width:260px"></i><div class="hl h1"></div><div class="hl h2"></div><div class="hl h3"></div><div class=cb></div><div class=cab></div>'}
-function load(i){act0();si=i;dio();
- if(i>=SC.length){sc=null;m.pause();st.className='a j';L.append(R(0,0,'Continuará',380,200).f());return}
- sc=SC[i];sc.cu=[];st.className=(sc.v?'v':'a '+sc.mood);m.src=U(sc.src);
- m.onloadedmetadata=()=>{const k=m.duration/sc.d;sc.cu=sc.c.map(c=>c.raw?c:{...c,a:c.a*k,b:c.b*k})};m.play().catch(()=>{})}
-function go(i){if(!started)return;i=Math.max(0,Math.min(SC.length,i));const w=$('#wp');w.classList.remove('go');void w.offsetWidth;w.classList.add('go');setTimeout(()=>load(i),480)}
-m.onended=()=>go(si+1);
-m.onpause=()=>{if(sc&&!m.ended){st.classList.add('ps');$('#pz').style.display='block'}};
-m.onplay=()=>{st.classList.remove('ps');$('#pz').style.display='none'};
-function tick(){if(sc){const t=m.currentTime;for(const c of sc.cu){const on=t>=c.a&&t<c.b,e=act.get(c);
- if(on&&!e){const el=c.f();(c.to?D:L).append(el);act.set(c,el)}
- else if(!on&&e){e.classList.add('out');setTimeout(()=>e.remove(),400);act.delete(c)}}
- $('#bar').style.width=((si+t/(m.duration||1))/SC.length*100)+'%'}
- requestAnimationFrame(tick)}
-function tog(){if(!started){if(!ready)return;started=true;document.documentElement.requestFullscreen?.().catch(()=>{});$('#intro').remove();go(0);return}
- if(sc)m.paused?m.play():m.pause()}
-function fs(){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen?.()}
-const fit=()=>st.style.transform=`translate(-50%,-50%) scale(${Math.min(innerWidth/1920,innerHeight/1080)})`;
-onresize=fit;fit();
-onclick=tog;
-onkeydown=e=>{const k=e.key;if(k==' '||k=='Enter'){e.preventDefault();tog()}else if(k=='ArrowRight')m.currentTime+=5;else if(k=='ArrowLeft')m.currentTime-=5;else if(/^(PageDown|n|N)$/.test(k))go(si+1);else if(/^(PageUp|p|P)$/.test(k))go(si-1);else if(/^(f|F)$/.test(k))fs()};
-let mt;onmousemove=()=>{document.body.classList.add('mv');clearTimeout(mt);mt=setTimeout(()=>document.body.classList.remove('mv'),2000)};
-(function(){const W=1920,H=1080,b=44,q=[];
- for(let x=b;x<W-b;x+=36)q.push([x,b+rd()*20-6]);for(let y=b;y<H-b;y+=36)q.push([W-b-rd()*20+6,y]);
- for(let x=W-b;x>b;x-=36)q.push([x,H-b-rd()*20+6]);for(let y=H-b;y>b;y-=36)q.push([b+rd()*20-6,y]);
- $('#fr').style.clipPath='path(evenodd,"M0 0H1920V1080H0Z M'+q.map(a=>a.join(' ')).join('L')+'Z")';
- const j=[];for(let y=0;y<=1080;y+=60)j.push((97+rd()*3)+'% '+y/10.8+'%');$('#wp').style.clipPath='polygon(0 0,'+j.join(',')+',0 100%)'})();
-dio();
-$('#pz').append(R(0,0,'pausa',420,170).f());
-$('#intro').append(R(0,0,'Medellín ¿quién cuenta esta historia?',230,150,-1).f());
-$('#intro').insertAdjacentHTML('beforeend','<div class=pc style="left:560px;top:850px;transform:rotate(-2deg);--d:0s"><div class=tg style="max-width:800px;text-align:center"><span id=ld>cargando…</span><br><small style="font-size:22px">espacio/clic: pausa · ← →: ±5 s · AvPág/RePág: escena · F: pantalla completa</small></div></div>');
-tick();
-(async()=>{const note=$('#ld');let ok=0;
- for(const z of ZIPS){try{
-  note.textContent='cargando '+(ok+1)+' de '+ZIPS.length+'…';
-  const r=await fetch(z);if(!r.ok)throw 0;const zp=await JSZip.loadAsync(await r.arrayBuffer());
-  for(const n of Object.keys(zp.files)){const f=zp.files[n];if(f.dir)continue;
-   BL[n]=URL.createObjectURL(new Blob([await f.async('arraybuffer')],{type:MT[n.split('.').pop()]||''}))}
-  ok++}catch(e){}}
- note.textContent=ok?'clic o espacio para empezar':'clic para empezar (usando carpeta assets/)';ready=1})();
-</script></body></html>
+'use strict';
+const files=['assets1.zip','assets2.zip','assets3.zip'];
+const status=document.querySelector('#status');
+const bar=document.querySelector('#bar');
+const start=document.querySelector('#start');
+const errors=document.querySelector('#errors');
+
+// Keep the start screen in place until the complete asset bundles have arrived.
+// Fetching them in parallel reduces the wait while still reporting progress.
+async function preload(){
+  let done=0;
+  const results=await Promise.all(files.map(async file=>{
+    try{
+      const response=await fetch(file);
+      if(!response.ok) throw new Error(`${file}: HTTP ${response.status}`);
+      const blob=await response.blob();
+      done++;
+      bar.style.width=`${Math.round(done/files.length*100)}%`;
+      status.textContent=`Recursos cargados: ${done} de ${files.length}…`;
+      return {file,ok:true,blob};
+    }catch(error){
+      done++;
+      bar.style.width=`${Math.round(done/files.length*100)}%`;
+      return {file,ok:false,error};
+    }
+  }));
+  const failed=results.filter(item=>!item.ok);
+  if(failed.length){
+    errors.style.display='block';
+    errors.textContent='No se pudieron cargar algunos archivos. Comprueba que assets1.zip, assets2.zip y assets3.zip estén publicados junto a index.html y vuelve a cargar la página.';
+    status.textContent='No se pudieron cargar todos los recursos.';
+    start.textContent='Reintentar';
+    start.style.display='inline-block';
+    start.disabled=false;
+    start.onclick=()=>location.reload();
+    return;
+  }
+  // Retain downloaded bundles in the browser cache for the subsequent experience.
+  status.textContent='Todos los recursos están cargados. Ya puedes empezar.';
+  start.style.display='inline-block';
+  start.disabled=false;
+  start.onclick=()=>{
+    status.textContent='¡Listo!';
+    start.disabled=true;
+  };
+}
+start.disabled=true;
+preload();
+</script>
+</body>
+</html>
