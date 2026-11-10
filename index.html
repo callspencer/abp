@@ -107,7 +107,8 @@ body.mv #hud{opacity:1}
 <script>
 const ZIPS=['assets1.zip','assets2.zip','assets3.zip'],BL={};
 const U=p=>BL[p]||'assets/'+p;
-const AU=p=>BL[p]||BL[Object.keys(BL).find(k=>k.endsWith('/'+p))]||'assets/'+p;
+const AUC=p=>{const n=x=>x.toLowerCase().replace(/[^a-z0-9.]/g,''),t=n(p);return[...Object.keys(BL).filter(k=>n(k.split('/').pop())==t).map(k=>BL[k]),'assets/'+p,'assets2/'+p,p]};
+function note(t){let e=document.getElementById('dbg');if(!e){e=document.createElement('div');e.id='dbg';e.className='tg';e.style.cssText='position:absolute;left:40px;top:40px;z-index:90;font-size:24px;max-width:1300px';st.append(e)}e.textContent=t;clearTimeout(e._t);e._t=setTimeout(()=>e.remove(),14000)}
 const MT={mp4:'video/mp4',mp3:'audio/mpeg',png:'image/png',jpg:'image/jpeg'};
 const LET={"a": ["a_1", "a_2", "a_3", "a_4"], "b": ["b_1", "b_2", "b_3", "b_4"], "c": ["c_1", "c_2", "c_3", "c_4"], "d": ["d_1", "d_2", "d_3", "d_4"], "e": ["e_1", "e_2", "e_3", "e_4"], "f": ["f_1", "f_2", "f_3", "f_4"], "g": ["g_1", "g_2", "g_3", "g_4"], "h": ["h_1", "h_2", "h_3", "h_4"], "i": ["i_1", "i_2", "i_3", "i_4"], "j": ["j_1", "j_2", "j_3", "j_4"], "k": ["k_1", "k_2", "k_3", "k_4"], "l": ["l_1", "l_2", "l_3", "l_4"], "m": ["m_1", "m_2", "m_3"], "n": ["n_1", "n_2", "n_3", "n_4"], "o": ["o_1", "o_2", "o_3", "o_4"], "p": ["p_1", "p_2", "p_3", "p_4"], "q": ["q_1", "q_2", "q_3", "q_4"], "r": ["r_1", "r_2", "r_3", "r_4"], "s": ["s_1", "s_2", "s_3", "s_4"], "t": ["t_1", "t_2", "t_3", "t_4"], "u": ["u_1", "u_2", "u_3", "u_4"], "v": ["v_1", "v_2", "v_3", "v_4"], "w": ["w_1", "w_2", "w_3"], "x": ["x1", "x2"], "y": ["y1", "y2"], "z": ["z_1", "z_2", "z_3"]};
 const $=s=>document.querySelector(s),st=$('#st'),m=$('#m'),L=$('#L'),D=$('#dio');
@@ -199,16 +200,18 @@ function dio(k){const s=k=='s',r=n=>(rd()*n)|0,pa=['#c8463a','#2f5d8a','#f0c24b'
 function load(i){act0();si=i;if(ma){ma.pause();ma=null}
  if(i>=SC.length){sc=null;m.pause();st.className='a j';dio('j');L.append(R(0,0,'Continuará',380,200).f());return}
  sc=SC[i];sc.cu=[];st.className=(sc.v?'v':'a '+sc.mood);if(!sc.v)dio(sc.mood);m.src=U(sc.src);m.muted=!!sc.au;
- if(sc.au){ma=new Audio(AU(sc.au));ma.preload='auto';ma.onloadedmetadata=fitRate}
+ if(sc.au){const c=AUC(sc.au);let j=0;const me=ma=new Audio();me.preload='auto';
+  const nx=()=>{if(me!==ma)return;if(j<c.length)me.src=c[j++];else{m.muted=false;m.playbackRate=1;note('No pude cargar '+sc.au+' (suena el audio original del video). En los zips hay: '+Object.keys(BL).slice(0,25).join(', '))}};
+  me.onerror=nx;me.onloadedmetadata=()=>{if(me!==ma)return;fitRate();if(!m.paused){syncA();me.play().catch(()=>{})}};nx()}
  m.onloadedmetadata=()=>{fitRate();D.style.setProperty('--dur',m.duration+'s');const k=m.duration/sc.d;sc.cu=sc.c.map(c=>c.raw?c:{...c,a:c.a*k,b:c.b*k})};m.play().catch(()=>{})}
 // Video sin su audio original + audio nuevo encima: el video se acelera/frena para terminar a la vez que el audio
-function fitRate(){if(ma&&ma.duration&&m.duration)m.playbackRate=Math.min(4,Math.max(.25,m.duration/ma.duration))}
-function syncA(){if(ma&&ma.duration)ma.currentTime=Math.min(ma.duration,m.currentTime/m.playbackRate)}
+function fitRate(){try{if(ma&&ma.duration&&m.duration)m.playbackRate=Math.min(4,Math.max(.25,m.duration/ma.duration))}catch(e){}}
+function syncA(){try{if(ma&&ma.duration)ma.currentTime=Math.min(ma.duration,m.currentTime/m.playbackRate)}catch(e){}}
 function go(i){if(!started)return;i=Math.max(0,Math.min(SC.length-1,i));const w=$('#wp');w.classList.remove('go');void w.offsetWidth;w.classList.add('go');setTimeout(()=>load(i),480)}
 m.onended=()=>{if(si<SC.length-1)go(si+1)};
 m.onseeked=syncA;
 m.onpause=()=>{if(ma)ma.pause();if(sc&&!m.ended){st.classList.add('ps');$('#pz').style.display='block'}};
-m.onplay=()=>{if(ma){syncA();ma.play().catch(()=>{})}st.classList.remove('ps');$('#pz').style.display='none'};
+m.onplay=()=>{if(ma){syncA();try{ma.play().catch(()=>{})}catch(e){}}st.classList.remove('ps');$('#pz').style.display='none'};
 function tick(){if(sc){const t=m.currentTime;
  if(ma&&!m.paused&&ma.duration&&Math.abs(ma.currentTime-t/m.playbackRate)>.25)syncA();for(const c of sc.cu){const on=t>=c.a&&t<c.b,e=act.get(c);
  if(on&&!e){const el=c.f();(c.to?D:L).append(el);act.set(c,el)}
