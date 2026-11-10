@@ -107,6 +107,7 @@ body.mv #hud{opacity:1}
 <script>
 const ZIPS=['assets1.zip','assets2.zip','assets3.zip'],BL={};
 const U=p=>BL[p]||'assets/'+p;
+const AU=p=>BL[p]||BL[Object.keys(BL).find(k=>k.endsWith('/'+p))]||'assets/'+p;
 const MT={mp4:'video/mp4',mp3:'audio/mpeg',png:'image/png',jpg:'image/jpeg'};
 const LET={"a": ["a_1", "a_2", "a_3", "a_4"], "b": ["b_1", "b_2", "b_3", "b_4"], "c": ["c_1", "c_2", "c_3", "c_4"], "d": ["d_1", "d_2", "d_3", "d_4"], "e": ["e_1", "e_2", "e_3", "e_4"], "f": ["f_1", "f_2", "f_3", "f_4"], "g": ["g_1", "g_2", "g_3", "g_4"], "h": ["h_1", "h_2", "h_3", "h_4"], "i": ["i_1", "i_2", "i_3", "i_4"], "j": ["j_1", "j_2", "j_3", "j_4"], "k": ["k_1", "k_2", "k_3", "k_4"], "l": ["l_1", "l_2", "l_3", "l_4"], "m": ["m_1", "m_2", "m_3"], "n": ["n_1", "n_2", "n_3", "n_4"], "o": ["o_1", "o_2", "o_3", "o_4"], "p": ["p_1", "p_2", "p_3", "p_4"], "q": ["q_1", "q_2", "q_3", "q_4"], "r": ["r_1", "r_2", "r_3", "r_4"], "s": ["s_1", "s_2", "s_3", "s_4"], "t": ["t_1", "t_2", "t_3", "t_4"], "u": ["u_1", "u_2", "u_3", "u_4"], "v": ["v_1", "v_2", "v_3", "v_4"], "w": ["w_1", "w_2", "w_3"], "x": ["x1", "x2"], "y": ["y1", "y2"], "z": ["z_1", "z_2", "z_3"]};
 const $=s=>document.querySelector(s),st=$('#st'),m=$('#m'),L=$('#L'),D=$('#dio');
@@ -145,7 +146,7 @@ R(60,70,'Violencia',300,80,-4,'left',50,620),R(62,70,'Innovación',300,70,4,'rig
 R(70,80,'¿Dos ciudades?',40,115),R(80,90,'Ambas están aquí',40,105),R(90,100,'Retroceder',40,115),
 I(92,111,'panoramaMedellin1.jpg',60,300,520,-3,'left'),I(95,111,'PanoramaMedellin2.jpg',1420,300,400,3,'right'),
 T(100,111,'y más adelante volveremos a este parque',60,660,-2)]},
-{n:'P',v:1,src:'p.mp4',d:66,c:[
+{n:'P',v:1,src:'p.mp4',au:'pirulo_new_audio.mp3',d:66,c:[
 T(0,5,'P · Una ciudad que siempre ha estado cambiando',70,930,-2),
 R(.5,10,'Siempre cambiando',40,110),I(2,10,'panoramaMedellin1.jpg',60,300,520,-3,'left'),
 T(10,21,'comunidades indígenas · colonización española',1430,330,3),
@@ -181,7 +182,7 @@ R(150,166,'El arte no lo arregla todo',60,100),T(152,166,'la violencia, la desig
 R(166,180,'Dos dimensiones',60,110),T(167,180,'el pasado que se recuerda',200,330,-3),T(169,180,'el trabajo cotidiano de quienes cambian su vida',1200,330,3),
 I(171,180,P,780,470,330,2,'up'),T(173,180,'… y esa idea nos lleva a otro lugar de Medellín',560,860,-1)]}
 ];
-let ready=0,si=-1,sc=null,act=new Map(),started=false;
+let ready=0,si=-1,sc=null,act=new Map(),started=false,ma=null;
 const act0=()=>{act.forEach(e=>e.remove());act.clear();L.innerHTML=''};
 function dio(k){const s=k=='s',r=n=>(rd()*n)|0,pa=['#c8463a','#2f5d8a','#f0c24b','#6b8f5a','#8a4f7d'];let x='<div class=sky></div>';
  if(s)for(let i=0;i<46;i++)x+=`<i class=star style="left:${r(1900)}px;top:${r(380)}px;animation-delay:-${rd()*3}s,${rd()*40}s"></i>`;
@@ -195,15 +196,21 @@ function dio(k){const s=k=='s',r=n=>(rd()*n)|0,pa=['#c8463a','#2f5d8a','#f0c24b'
  for(let i=0;i<16;i++)x+=`<i class=fl style="left:${r(1900)}px;background:${s?'#b9b3ad':['#d96b4a','#f0c24b','#f4e8cb','#2f5d8a'][r(4)]};--t:${14+r(14)}s;--d:-${r(25)}s"></i>`;
  if(s)x+='<div class=dk></div>';
  D.innerHTML=x}
-function load(i){act0();si=i;
+function load(i){act0();si=i;if(ma){ma.pause();ma=null}
  if(i>=SC.length){sc=null;m.pause();st.className='a j';dio('j');L.append(R(0,0,'Continuará',380,200).f());return}
- sc=SC[i];sc.cu=[];st.className=(sc.v?'v':'a '+sc.mood);if(!sc.v)dio(sc.mood);m.src=U(sc.src);
- m.onloadedmetadata=()=>{D.style.setProperty('--dur',m.duration+'s');const k=m.duration/sc.d;sc.cu=sc.c.map(c=>c.raw?c:{...c,a:c.a*k,b:c.b*k})};m.play().catch(()=>{})}
+ sc=SC[i];sc.cu=[];st.className=(sc.v?'v':'a '+sc.mood);if(!sc.v)dio(sc.mood);m.src=U(sc.src);m.muted=!!sc.au;
+ if(sc.au){ma=new Audio(AU(sc.au));ma.preload='auto';ma.onloadedmetadata=fitRate}
+ m.onloadedmetadata=()=>{fitRate();D.style.setProperty('--dur',m.duration+'s');const k=m.duration/sc.d;sc.cu=sc.c.map(c=>c.raw?c:{...c,a:c.a*k,b:c.b*k})};m.play().catch(()=>{})}
+// Video sin su audio original + audio nuevo encima: el video se acelera/frena para terminar a la vez que el audio
+function fitRate(){if(ma&&ma.duration&&m.duration)m.playbackRate=Math.min(4,Math.max(.25,m.duration/ma.duration))}
+function syncA(){if(ma&&ma.duration)ma.currentTime=Math.min(ma.duration,m.currentTime/m.playbackRate)}
 function go(i){if(!started)return;i=Math.max(0,Math.min(SC.length-1,i));const w=$('#wp');w.classList.remove('go');void w.offsetWidth;w.classList.add('go');setTimeout(()=>load(i),480)}
 m.onended=()=>{if(si<SC.length-1)go(si+1)};
-m.onpause=()=>{if(sc&&!m.ended){st.classList.add('ps');$('#pz').style.display='block'}};
-m.onplay=()=>{st.classList.remove('ps');$('#pz').style.display='none'};
-function tick(){if(sc){const t=m.currentTime;for(const c of sc.cu){const on=t>=c.a&&t<c.b,e=act.get(c);
+m.onseeked=syncA;
+m.onpause=()=>{if(ma)ma.pause();if(sc&&!m.ended){st.classList.add('ps');$('#pz').style.display='block'}};
+m.onplay=()=>{if(ma){syncA();ma.play().catch(()=>{})}st.classList.remove('ps');$('#pz').style.display='none'};
+function tick(){if(sc){const t=m.currentTime;
+ if(ma&&!m.paused&&ma.duration&&Math.abs(ma.currentTime-t/m.playbackRate)>.25)syncA();for(const c of sc.cu){const on=t>=c.a&&t<c.b,e=act.get(c);
  if(on&&!e){const el=c.f();(c.to?D:L).append(el);act.set(c,el)}
  else if(!on&&e){e.classList.add('out');setTimeout(()=>e.remove(),400);act.delete(c)}}
  $('#bar').style.width=((si+t/(m.duration||1))/SC.length*100)+'%'}
